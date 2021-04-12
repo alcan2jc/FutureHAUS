@@ -3,9 +3,8 @@
     top: 35%; 
     right: 50%;
     transform: translate(50%,-50%);
-    text-transform: uppercase;
     font-family: verdana;
-    font-size: 12em;
+    font-size: 5em;
     font-weight: 700;
     color: #ffffff;
     text-shadow: 1px 1px 1px #919191,
@@ -24,18 +23,40 @@
     1px 30px 60px rgba(16,16,16,0.4);
 }
 
-.mat-button {
-    display: flex;
-    border-radius: 50px;
-    margin-left: 500px;
-    margin-right: 500px;
-    margin-bottom: 50px;
-    width: 250px;
-    height: 64px;
-    line-height: 64px;
-    background-color:  #616161;
-    color: #e0e0e0;
-    font-size: 32px;
-    padding:0 !important;
-	justify-content: center;
+.card {
+    margin: auto;
+    width: 80%;
+    border: 3px solid black;
+}
+
+.title {
+    margin: auto;
+    width: 50%;
+    text-align: center;
+}
+
+
+mat-grid-tile {
+    background: lightgreen;
+}
+
+.container {
+    display: table;
+    position: relative;
+    border: 3px solid teal;
+    padding-top: 5em;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
+
+.two-button-group {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.big-button {
+    padding: 100px 100px;
+    margin-left: auto;
+    margin-right: auto;
 }

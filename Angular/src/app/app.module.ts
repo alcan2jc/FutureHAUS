@@ -20,6 +20,8 @@ import { InfoComponent } from './info/info.component';
 import { ARComponent } from './ar/ar.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { ChartsModule } from 'ng2-charts';
+import {MatGridListModule} from '@angular/material/grid-list';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -42,7 +44,8 @@ import { ChartsModule } from 'ng2-charts';
     MatToolbarModule, 
     HttpClientModule, 
     MatSnackBarModule, 
-    ChartsModule
+    ChartsModule,
+    MatGridListModule
 
   ],
   providers: [],
