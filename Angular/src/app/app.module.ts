@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
-import { WelcomeComponent } from './welcome/welcome.component';
+import { ControlComponent } from './control/control.component';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatCardModule} from '@angular/material/card';
@@ -13,12 +13,13 @@ import {MatInputModule} from '@angular/material/input';
 import {FormsModule} from "@angular/forms";
 import {MatButtonModule} from '@angular/material/button';
 import { IgxButtonModule } from 'igniteui-angular';
+import {MatToolbarModule} from '@angular/material/toolbar';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    WelcomeComponent
+    ControlComponent
   ],
   imports: [
     BrowserModule,
@@ -29,7 +30,8 @@ import { IgxButtonModule } from 'igniteui-angular';
     MatInputModule,
     FormsModule, 
     IgxButtonModule, 
-    MatButtonModule
+    MatButtonModule, 
+    MatToolbarModule
 
   ],
   providers: [],

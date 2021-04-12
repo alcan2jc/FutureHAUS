@@ -1,13 +1,13 @@
 .text {
     position: absolute;
-    top: 50%; 
+    top: 35%; 
     right: 50%;
     transform: translate(50%,-50%);
     text-transform: uppercase;
     font-family: verdana;
     font-size: 12em;
     font-weight: 700;
-    color: #30a4e7;
+    color: #ffffff;
     text-shadow: 1px 1px 1px #919191,
         1px 2px 1px #919191,
         1px 3px 1px #919191,
