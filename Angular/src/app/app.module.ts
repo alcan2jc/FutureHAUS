@@ -16,10 +16,11 @@ import { IgxButtonModule } from 'igniteui-angular';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import { HttpClientModule } from '@angular/common/http';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
-import { InfoComponent } from './info/info.component';
+import { InfoComponent } from './power_info/info/info.component';
 import { ARComponent } from './ar/ar.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { ChartsModule } from 'ng2-charts';
+import {MatSidenavModule} from '@angular/material/sidenav';
 @NgModule({
   declarations: [
     AppComponent,
@@ -42,7 +43,8 @@ import { ChartsModule } from 'ng2-charts';
     MatToolbarModule, 
     HttpClientModule, 
     MatSnackBarModule, 
-    ChartsModule
+    ChartsModule, 
+    MatSidenavModule
 
   ],
   providers: [],

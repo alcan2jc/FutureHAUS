@@ -4,7 +4,7 @@ import {AuthGuard} from './_services/auth-guard.service';
 import { LoginComponent } from './login/login.component';
 import { ControlComponent } from './control/control.component';
 import { WelcomeComponent } from './welcome/welcome.component';
-import { InfoComponent } from './info/info.component';
+import { InfoComponent } from './power_info/info/info.component';
 import { ARComponent } from './ar/ar.component';
 
 const routes: Routes = [
@@ -13,7 +13,7 @@ const routes: Routes = [
 	{ path: 'control', component: ControlComponent },
 	{ path: 'info', component: InfoComponent },
 	{ path: 'ar', component: ARComponent },
-  { path: '**', redirectTo: '' }
+  	{ path: '**', redirectTo: '' }
 ];
 
 @NgModule({
