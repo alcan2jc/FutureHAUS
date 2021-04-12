@@ -1,0 +1,37 @@
+<mat-drawer-container class="status-container">
+    <mat-drawer class="side-drawer" mode="side" opened>
+        <div>
+            Selection
+        </div>
+        <div>
+            <button mat-button routerLink="/info">Production/Consumption</button>
+        </div>
+        <div>
+            <button mat-button routerLink="/battery">Battery</button>
+        </div>
+        <div>
+            <button mat-button>Solar Panels</button>
+        </div>
+        <div>
+            <button mat-button>Charge Controllers</button>
+        </div>
+        <div>
+            <button mat-button>Inverter</button>
+        </div>
+    </mat-drawer>
+    <mat-drawer-content>
+        <div>
+            <div>
+              <div style="display: block">
+                <canvas baseChart
+                  [data]="chartData"
+                  [labels]="chartLabels"
+                  chartType="doughnut"
+                  [colors]="colors"
+                  ></canvas>
+              </div>
+            </div>
+          </div>
+    </mat-drawer-content>
+</mat-drawer-container>
+

@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { ControlComponent } from './control/control.component';
-import { InfoComponent } from './power_info/info/info.component';
+import { PowerComponent } from './power_info/power/power.component';
 import { ARComponent } from './ar/ar.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 
@@ -22,15 +22,17 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { ChartsModule } from 'ng2-charts';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatGridListModule} from '@angular/material/grid-list';
+import { BatteryComponent } from './power_info/battery/battery.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     ControlComponent,
-    InfoComponent,
+    PowerComponent,
     ARComponent,
-    WelcomeComponent
+    WelcomeComponent,
+    BatteryComponent
   ],
   imports: [
     BrowserModule,

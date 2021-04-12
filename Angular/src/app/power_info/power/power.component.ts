@@ -6,10 +6,10 @@ import { Color, BaseChartDirective, Label } from 'ng2-charts';
 
 @Component({
   selector: 'app-info',
-  templateUrl: './info.component.html',
-  styleUrls: ['./info.component.css']
+  templateUrl: './power.component.html',
+  styleUrls: ['./power.component.css']
 })
-export class InfoComponent implements OnInit {
+export class PowerComponent implements OnInit {
 
   public lineChartData: ChartDataSets[] = [
     { data: [65, 59, 80, 81], label: 'Power Production' },
