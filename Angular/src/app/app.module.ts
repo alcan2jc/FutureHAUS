@@ -14,12 +14,20 @@ import {FormsModule} from "@angular/forms";
 import {MatButtonModule} from '@angular/material/button';
 import { IgxButtonModule } from 'igniteui-angular';
 import {MatToolbarModule} from '@angular/material/toolbar';
-
+import { HttpClientModule } from '@angular/common/http';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { InfoComponent } from './info/info.component';
+import { ARComponent } from './ar/ar.component';
+import { WelcomeComponent } from './welcome/welcome.component';
+import { ChartsModule } from 'ng2-charts';
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    ControlComponent
+    ControlComponent,
+    InfoComponent,
+    ARComponent,
+    WelcomeComponent
   ],
   imports: [
     BrowserModule,
@@ -31,7 +39,10 @@ import {MatToolbarModule} from '@angular/material/toolbar';
     FormsModule, 
     IgxButtonModule, 
     MatButtonModule, 
-    MatToolbarModule
+    MatToolbarModule, 
+    HttpClientModule, 
+    MatSnackBarModule, 
+    ChartsModule
 
   ],
   providers: [],
