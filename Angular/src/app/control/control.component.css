@@ -25,7 +25,7 @@
 
 .card {
     margin: auto;
-    width: 80%;
+    width: 75%;
     border: 3px solid black;
 }
 
@@ -35,9 +35,10 @@
     text-align: center;
 }
 
-
-mat-grid-tile {
-    background: lightgreen;
+.tile-text {
+    text-align: center;
+    font-size: large;
+    font-style: oblique;
 }
 
 .container {

@@ -6,11 +6,31 @@
 
     <div mat-grid-list>
 
-        <mat-grid-list cols="2" rowHeight="2:1">
-            <mat-grid-tile><a href=""><img src="https://image.shutterstock.com/image-vector/sample-stamp-grunge-texture-vector-260nw-1389188336.jpg"></a></mat-grid-tile>
-            <mat-grid-tile>2</mat-grid-tile>
-            <mat-grid-tile>3</mat-grid-tile>
-            <mat-grid-tile>4</mat-grid-tile>
+        <mat-grid-list cols="2" rows="2" rowHeight="2:1">
+            <mat-grid-tile style="background-color:aliceblue">
+                <mat-card>
+                    <a href=""><img [src]="img1"></a>
+                    <p class="tile-text">Room1</p>
+                </mat-card>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-card>
+                    <a href=""><img [src]="img2"></a>
+                    <p class="tile-text">Room2</p>
+                </mat-card>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-card>
+                    <a href=""><img [src]="img3"></a>
+                    <p class="tile-text">Room3</p>
+                </mat-card>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-card>
+                    <a href=""><img [src]="img4"></a>
+                    <p class="tile-text">Room4</p>
+                </mat-card>
+            </mat-grid-tile>
           </mat-grid-list>
 
     </div>
