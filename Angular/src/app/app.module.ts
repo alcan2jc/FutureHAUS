@@ -5,6 +5,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { ControlComponent } from './control/control.component';
+import { InfoComponent } from './power_info/info/info.component';
+import { ARComponent } from './ar/ar.component';
+import { WelcomeComponent } from './welcome/welcome.component';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatCardModule} from '@angular/material/card';
@@ -16,11 +19,10 @@ import { IgxButtonModule } from 'igniteui-angular';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import { HttpClientModule } from '@angular/common/http';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
-import { InfoComponent } from './power_info/info/info.component';
-import { ARComponent } from './ar/ar.component';
-import { WelcomeComponent } from './welcome/welcome.component';
 import { ChartsModule } from 'ng2-charts';
 import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatGridListModule} from '@angular/material/grid-list';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -44,7 +46,9 @@ import {MatSidenavModule} from '@angular/material/sidenav';
     HttpClientModule, 
     MatSnackBarModule, 
     ChartsModule, 
-    MatSidenavModule
+    MatSidenavModule,
+    ChartsModule,
+    MatGridListModule
 
   ],
   providers: [],
