@@ -21,7 +21,8 @@ const routes: Routes = [
 
 	//Augmented Reality
 	{ path: 'ar', component: ARComponent },
-  	{ path: '**', redirectTo: '' }
+  
+  { path: '**', redirectTo: '' }
 ];
 
 @NgModule({
