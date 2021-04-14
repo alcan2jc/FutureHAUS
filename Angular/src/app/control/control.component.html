@@ -1,40 +1,42 @@
 
-<mat-card class="card">
+<mat-card class="main-card">
     <mat-card-title class="title">
         FutureHAUS
     </mat-card-title>
 
-    <div mat-grid-list>
-
-        <mat-grid-list cols="2" rows="2" rowHeight="2:1">
-            <mat-grid-tile style="background-color:aliceblue">
-                <mat-card>
-                    <a href=""><img [src]="img1"></a>
-                    <p class="tile-text">Room1</p>
-                </mat-card>
-            </mat-grid-tile>
-            <mat-grid-tile>
-                <mat-card>
-                    <a href=""><img [src]="img2"></a>
-                    <p class="tile-text">Room2</p>
-                </mat-card>
-            </mat-grid-tile>
-            <mat-grid-tile>
-                <mat-card>
-                    <a href=""><img [src]="img3"></a>
-                    <p class="tile-text">Room3</p>
-                </mat-card>
-            </mat-grid-tile>
-            <mat-grid-tile>
-                <mat-card>
-                    <a href=""><img [src]="img4"></a>
-                    <p class="tile-text">Room4</p>
-                </mat-card>
-            </mat-grid-tile>
-          </mat-grid-list>
-
-    </div>
-
+    <mat-card-content>
+        <div mat-grid-list>
+            <mat-grid-list cols="2" rows="2" rowHeight="2:1">
+                <mat-grid-tile>
+                    <mat-card class="tile-card">
+                        <a href=""><img [src]="img1"></a>
+                        <mat-card-footer class="tile-text">Bathroom</mat-card-footer>
+                    </mat-card>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                    <mat-card class="tile-card">
+                        <a href=""><img [src]="img2"></a>
+                        <mat-card-footer class="tile-text">Entrance</mat-card-footer>
+                    </mat-card>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                    <mat-card class="tile-card">
+                        <a href=""><img [src]="img3"></a>
+                        <mat-card-footer class="tile-text">Bedroom</mat-card-footer>
+                    </mat-card>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                    <mat-card class="tile-card">
+                        <a href=""><img [src]="img4"></a>
+                        <mat-card-footer class="tile-text">kitchen</mat-card-footer>
+                    </mat-card>
+                </mat-grid-tile>
+            </mat-grid-list>
+        </div>
+    </mat-card-content>
+    <mat-card-footer>
+        Images taken from <a href="https://www.futurehaus.tech/">https://www.futurehaus.tech/</a>
+    </mat-card-footer>
 </mat-card>
 
 
