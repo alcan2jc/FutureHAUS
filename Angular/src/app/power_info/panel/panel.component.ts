@@ -5,16 +5,14 @@ import { Color, BaseChartDirective, Label } from 'ng2-charts';
 // import * as pluginAnnotations from 'chartjs-plugin-annotation';
 
 @Component({
-  selector: 'power-component',
-  templateUrl: './power.component.html',
-  styleUrls: ['./power.component.css']
+  selector: 'panel-component',
+  templateUrl: './panel.component.html',
+  styleUrls: ['./panel.component.css']
 })
-export class PowerComponent implements OnInit {
+export class PanelComponent implements OnInit {
 
   public lineChartData: ChartDataSets[] = [
-    { data: [65, 59, 80, 81], label: 'Power Production' },
-    { data: [28, 48, 40, 19], label: 'Power Consumption' },
-    { data: [65 - 28, 59 - 48, 80 - 49, 81 - 19],  label: 'Net Power'}
+    { data: [2500, 3500, 6700, 5000, 7000], label: 'PV Harvest Power' },
   ];
 
   public lineChartLabels: Label[] = ['January', 'February', 'March', 
@@ -51,24 +49,8 @@ export class PowerComponent implements OnInit {
   };
   public lineChartColors: Color[] = [
     { //Power Production
-      backgroundColor: 'rgba(148,159,177,0.2)',
+      backgroundColor: 'rgba(148,255,200)',
       borderColor: 'green',
-      pointBackgroundColor: 'rgba(148,159,177,1)',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(148,159,177,0.8)'
-    },
-    { // Power Consumption
-      backgroundColor: 'rgba(148,159,177,0.2)',
-      borderColor: 'red',
-      pointBackgroundColor: 'rgba(148,159,177,1)',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(148,159,177,0.8)'
-    }, 
-    { // Net Power
-      backgroundColor: 'rgba(148,159,177,0.2)',
-      borderColor: 'blue',
       pointBackgroundColor: 'rgba(148,159,177,1)',
       pointBorderColor: '#fff',
       pointHoverBackgroundColor: '#fff',

@@ -1,0 +1,41 @@
+<mat-drawer-container class="status-container">
+    <mat-drawer class="side-drawer" mode="side" opened>
+        <div>
+            Selection
+        </div>
+        <div>
+            <button mat-button (click)="display='power'">Production/Consumption</button>
+        </div>
+        <div>
+            <button mat-button (click)="display='battery'">Battery</button>
+        </div>
+        <div>
+            <button mat-button (click)="display='panel'">Solar Panel</button>
+        </div>
+        <div>
+            <button mat-button (click)="display='chargecontroller'">Charge Controllers</button>
+        </div>
+        <div>
+            <button mat-button (click)="display='inverter'">Inverter</button>
+        </div>
+    </mat-drawer>
+    <mat-drawer-content>
+        <div>
+            <div *ngIf="display==='power'">
+                <power-component></power-component>
+            </div>
+            <div *ngIf="display==='battery'">
+                <battery-component></battery-component>
+            </div>
+            <div *ngIf="display==='panel'">
+                <panel-component></panel-component>
+            </div>
+            <div *ngIf="display==='chargecontroller'">
+                <chargecontroller-component></chargecontroller-component>
+            </div>
+            <div *ngIf="display==='inverter'">
+                <inverter-component></inverter-component>
+            </div>
+        </div>
+    </mat-drawer-content>
+</mat-drawer-container>

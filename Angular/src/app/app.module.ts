@@ -23,6 +23,10 @@ import { ChartsModule } from 'ng2-charts';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatGridListModule} from '@angular/material/grid-list';
 import { BatteryComponent } from './power_info/battery/battery.component';
+import { PanelComponent } from './power_info/panel/panel.component';
+import { ChargecontrollerComponent } from './power_info/chargecontroller/chargecontroller.component';
+import { InverterComponent } from './power_info/inverter/inverter.component';
+import { InfoComponent } from './power_info//info.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +36,11 @@ import { BatteryComponent } from './power_info/battery/battery.component';
     PowerComponent,
     ARComponent,
     WelcomeComponent,
-    BatteryComponent
+    BatteryComponent,
+    PanelComponent,
+    ChargecontrollerComponent,
+    InverterComponent,
+    InfoComponent
   ],
   imports: [
     BrowserModule,
