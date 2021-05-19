@@ -9,8 +9,9 @@ export class InfoComponent implements OnInit {
 
   constructor() { }
 
+  
   display: String;
   ngOnInit(): void {
-    this.display = 'power';
+    this.display = 'dash';
   }
 }

@@ -4,6 +4,9 @@
             Selection
         </div>
         <div>
+            <button mat-button (click)="display='dash'">Dashboard</button>
+        </div>
+        <div>
             <button mat-button (click)="display='power'">Production/Consumption</button>
         </div>
         <div>
@@ -21,6 +24,9 @@
     </mat-drawer>
     <mat-drawer-content>
         <div>
+            <div *ngIf="display==='dash'">
+                <dash-component></dash-component>
+            </div>
             <div *ngIf="display==='power'">
                 <power-component></power-component>
             </div>

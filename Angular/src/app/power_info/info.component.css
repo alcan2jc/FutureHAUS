@@ -1,13 +1,13 @@
 .status-container {
-    width: 90%;
-    height: 100%;
-    min-width: 90%;
-    min-height: 90%;
+    width: 98%;
+    height: 90vh;
     margin: 10px;
     border: 1px solid #555;
+    position: fixed;
 }
 
 .side-container {
     width: 50%;
-    height: 50%;
+    height: 20%;
+    position: fixed;
 }

@@ -91,7 +91,7 @@ export class BatteryComponent implements OnInit {
   modifyCenterText() {
     const chart = this.basechart.chart;
     const ctx = chart.ctx;
-    const txt = this.currentVoltage.toFixed(1).toString();
+    const txt = this.currentVoltage.toFixed(1).toString() + "V";
 
     //Get options from the center object in options
     const sidePadding = 60;

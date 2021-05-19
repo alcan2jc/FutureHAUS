@@ -1,0 +1,28 @@
+<!--dash.component.html-->
+<div class="grid-container">
+  <h1 class="mat-h1">Dashboard</h1>
+  <mat-grid-list cols="{{ ( cardLayout | async )?.columns }}" rowHeight="300px">
+    
+    <mat-grid-tile [colspan]="( cardLayout | async )?.power.cols"
+      [rowspan]="( cardLayout | async )?.power.rows">
+      <app-card>
+        <div>
+          <high-charts-power-component></high-charts-power-component>
+        </div>
+    </app-card>
+    </mat-grid-tile>
+    
+    <mat-grid-tile [colspan]="( cardLayout | async )?.battery.cols"
+      [rowspan]="( cardLayout | async )?.battery.rows">
+      <app-card title="Battery Voltage">
+        <div>
+          <battery-component></battery-component>
+        </div>
+      </app-card>
+    </mat-grid-tile>
+    
+    <mat-grid-tile [colspan]="( cardLayout | async )?.weather.cols" [rowspan]="( cardLayout | async )?.weather.rows">
+      <app-card title="Weather"><div>Weather Content Here</div></app-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+ </div>

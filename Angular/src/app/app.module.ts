@@ -27,6 +27,13 @@ import { PanelComponent } from './power_info/panel/panel.component';
 import { ChargecontrollerComponent } from './power_info/chargecontroller/chargecontroller.component';
 import { InverterComponent } from './power_info/inverter/inverter.component';
 import { InfoComponent } from './power_info//info.component';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatIconModule } from '@angular/material/icon';
+import { LayoutModule } from '@angular/cdk/layout';
+import { DashboardComponent } from './power_info/dashboard/dashboard.component';
+import { CardComponent } from './power_info/card/card.component';
+import { HighchartsChartModule } from 'highcharts-angular';
+import { HighChartsPowerComponent } from './power_info/high-charts-power/high-charts-power.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +47,10 @@ import { InfoComponent } from './power_info//info.component';
     PanelComponent,
     ChargecontrollerComponent,
     InverterComponent,
-    InfoComponent
+    InfoComponent,
+    DashboardComponent,
+    CardComponent,
+    HighChartsPowerComponent,
   ],
   imports: [
     BrowserModule,
@@ -58,7 +68,11 @@ import { InfoComponent } from './power_info//info.component';
     ChartsModule, 
     MatSidenavModule,
     ChartsModule,
-    MatGridListModule
+    MatGridListModule,
+    MatMenuModule,
+    MatIconModule,
+    LayoutModule, 
+    HighchartsChartModule
 
   ],
   providers: [],
