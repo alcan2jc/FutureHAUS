@@ -1,124 +1,138 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import * as Highcharts from "highcharts";
+import HighchartsMore from 'highcharts/highcharts-more';
+import HighchartsSolidGauge from 'highcharts/modules/solid-gauge';
+import theme from 'highcharts/themes/dark-unica';
+import { interval, Subscription } from 'rxjs';
 
-import { Label, PluginServiceGlobalRegistrationAndOptions, BaseChartDirective } from 'ng2-charts';
-import { ChartOptions } from "chart.js";
 
-const Nominal = 52.6;
+HighchartsMore(Highcharts);
+HighchartsSolidGauge(Highcharts);
+theme(Highcharts);
 
 @Component({
   selector: 'battery-component',
   templateUrl: './battery.component.html',
-  styleUrls: ['./battery.component.css']
+  styleUrls: ['./battery.component.scss']
 })
 
 export class BatteryComponent implements OnInit {
 
-  @ViewChild(BaseChartDirective) basechart: BaseChartDirective;
-  public chartLabels: Label[] = ['Battery Voltage', 'Total'];
-  currentVoltage = Nominal;
-  public chartData = [this.currentVoltage, Nominal - this.currentVoltage];
-  public chartOptions: ChartOptions = {
-    animation: {
-      onComplete: function() {
-        this.modifyCenterText();
-      }.bind(this)
-    }
-  };
-  // public doughnutChartPlugins: PluginServiceGlobalRegistrationAndOptions[] = [{
-  //   beforeDraw(chart) {
-  //     const ctx = chart.ctx;
-  //     const txt = 'Center Text';
-
-  //     //Get options from the center object in options
-  //     const sidePadding = 60;
-  //     const sidePaddingCalculated = (sidePadding / 100) * (100 * 2)
-  //     ctx.textAlign = 'center';
-  //     ctx.textBaseline = 'middle';
-  //     const centerX = ((chart.chartArea.left + chart.chartArea.right) / 2);
-  //     const centerY = ((chart.chartArea.top + chart.chartArea.bottom) / 2);
-
-  //     //Get the width of the string and also the width of the element minus 10 to give it 5px side padding
-  //     const stringWidth = ctx.measureText(txt).width;
-  //     const elementWidth = (100 * 2) - sidePaddingCalculated;
-
-  //     // Find out how much the font can grow in width.
-  //     const widthRatio = elementWidth / stringWidth;
-  //     const newFontSize = Math.floor(30 * widthRatio);
-  //     const elementHeight = (100 * 2);
-
-  //     // Pick a new font size so it will not be larger than the height of label.
-  //     const fontSizeToUse = Math.min(newFontSize, elementHeight);
-
-  //     ctx.font = fontSizeToUse + 'px Arial';
-  //     ctx.fillStyle = 'blue';
-
-  //     // Draw text in center
-  //     // if (typeof (this.chartData == 'undefined')) {
-  //     //   this.chartData = [this.currentVoltage, Nominal - this.currentVoltage];
-  //     // }
-  //     if (typeof (this.currentVoltage == 'undefined')) {
-  //       this.currentVoltage = Nominal;
-  //     }
-  //     ctx.fillText(this.currentVoltage.toString() + 'V', centerX, centerY);
-  //   }
-  // }];
-  public colors = [
-    {
-      backgroundColor: [
-        'green'
-      ]
-    }
-  ];
   constructor() { }
+  data: Number[];
+  polltime;
+  updateFlag: boolean;
+  subscription: Subscription;
+  Highcharts: typeof Highcharts = Highcharts;
+
+  gaugeOptions: Highcharts.Options = {
+
+    chart: {
+      type: 'solidgauge'
+    },
+
+    title: {
+      text: 'Battery Voltage'
+    },
+
+    pane: {
+      center: ['50%', '85%'],
+      size: '140%',
+      startAngle: -90,
+      endAngle: 90,
+      background: [{
+        backgroundColor: '#111',
+        innerRadius: '60%',
+        outerRadius: '100%',
+        shape: 'arc'
+      }]
+    },
+
+    exporting: {
+      enabled: false
+    },
+
+    tooltip: {
+      enabled: false
+    },
+
+    // the value axis
+    yAxis: {
+      min: 0,
+      max: 52.6,
+      title: {
+        text: 'Voltage',
+        y: -70
+      },
+      stops: [
+        [0.1, '#DF5353'], // red
+        [0.9, '#55BF3B'] // green
+
+      ],
+      lineWidth: 5,
+      tickWidth: 2,
+      minorTickInterval: null,
+      tickAmount: 5,
+      tickInterval: (3),
+      labels: {
+        y: 15
+      }
+    },
+
+    plotOptions: {
+      solidgauge: {
+        dataLabels: {
+          y: 5,
+          borderWidth: 0,
+          useHTML: true
+        }
+      }
+    },
+
+    credits: {
+      enabled: false
+    },
+
+    series: [{
+      name: 'Voltage',
+      type: undefined,
+      data: [0],
+      dataLabels: {
+        format:
+          '<div style="text-align:center">' +
+          '<span style="font-size:25px">{y}</span><br/>' +
+          '<span style="font-size:12px;opacity:0.4">V</span>' +
+          '</div>'
+      },
+    }]
+  }
 
   ngOnInit(): void {
-    // this.update();
+    this.updateFlag = false;
+    this.polltime = interval(3000);
+    this.subscription = this.polltime.subscribe(() => {
+      this.data = [Math.floor(Math.random() * 50)];
+      this.update(this.data);
+    });
   }
 
-  update() {
-    // setInterval(() => {
-    // }, 5000);
-    this.chartLabels.length = 0
-    this.chartLabels.push(...['Battery Voltage', 'Nominal Voltage']);
-    this.chartData.length = 0;
-    let newVoltage = Math.random() * Nominal;
-    this.currentVoltage = newVoltage;
-    this.chartData.push(...[newVoltage, Nominal - newVoltage]);
-    this.basechart.chart.config.data.labels = this.chartLabels;
-    this.basechart.chart.update();
+  update(val) {
+    this.gaugeOptions.series = [{
+      name: 'Voltage',
+      type: undefined,
+      data: val,
+      dataLabels: {
+        format:
+          '<div style="text-align:center">' +
+          '<span style="font-size:25px">{y}</span><br/>' +
+          '<span style="font-size:12px;opacity:0.4">V</span>' +
+          '</div>'
+      },
+    }]
+    this.updateFlag=true;
   }
 
-  modifyCenterText() {
-    const chart = this.basechart.chart;
-    const ctx = chart.ctx;
-    const txt = this.currentVoltage.toFixed(1).toString() + "V";
-
-    //Get options from the center object in options
-    const sidePadding = 60;
-    const sidePaddingCalculated =
-      (sidePadding / 100) * (chart["innerRadius"] * 2);
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    const centerX = (chart.chartArea.left + chart.chartArea.right) / 2;
-    const centerY = (chart.chartArea.top + chart.chartArea.bottom) / 2;
-
-    //Get the width of the string and also the width of the element minus 10 to give it 5px side padding
-    const stringWidth = ctx.measureText(txt).width;
-    const elementWidth = chart["innerRadius"] * 2 - sidePaddingCalculated;
-
-    // Find out how much the font can grow in width.
-    const widthRatio = elementWidth / stringWidth;
-    const newFontSize = Math.floor(25 * widthRatio);
-    const elementHeight = chart["innerRadius"] * 2;
-
-    // Pick a new font size so it will not be larger than the height of label.
-    const fontSizeToUse = Math.min(newFontSize, elementHeight);
-
-    ctx.font = fontSizeToUse + "px Arial";
-    ctx.fillStyle = "blue";
-
-    // Draw text in center
-    ctx.fillText(txt, centerX, centerY);
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
-
 }

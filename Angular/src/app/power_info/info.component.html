@@ -1,4 +1,4 @@
-<mat-drawer-container class="status-container">
+<mat-drawer-container class="darkMode">
     <mat-drawer class="side-drawer" mode="side" opened>
         <div>
             Selection
@@ -22,7 +22,7 @@
             <button mat-button (click)="display='inverter'">Inverter</button>
         </div>
     </mat-drawer>
-    <mat-drawer-content>
+    <mat-drawer-content class="dark">
         <div>
             <div *ngIf="display==='dash'">
                 <dash-component></dash-component>

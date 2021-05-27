@@ -8,6 +8,7 @@ import { ControlComponent } from './control/control.component';
 import { PowerComponent } from './power_info/power/power.component';
 import { ARComponent } from './ar/ar.component';
 import { WelcomeComponent } from './welcome/welcome.component';
+import { WeatherComponent } from './power_info/weather/weather.component';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatCardModule} from '@angular/material/card';
@@ -33,7 +34,7 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { DashboardComponent } from './power_info/dashboard/dashboard.component';
 import { CardComponent } from './power_info/card/card.component';
 import { HighchartsChartModule } from 'highcharts-angular';
-import { HighChartsPowerComponent } from './power_info/high-charts-power/high-charts-power.component';
+import {MatListModule} from '@angular/material/list';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,7 @@ import { HighChartsPowerComponent } from './power_info/high-charts-power/high-ch
     InfoComponent,
     DashboardComponent,
     CardComponent,
-    HighChartsPowerComponent,
+    WeatherComponent,
   ],
   imports: [
     BrowserModule,
@@ -72,7 +73,8 @@ import { HighChartsPowerComponent } from './power_info/high-charts-power/high-ch
     MatMenuModule,
     MatIconModule,
     LayoutModule, 
-    HighchartsChartModule
+    HighchartsChartModule,
+    MatListModule
 
   ],
   providers: [],

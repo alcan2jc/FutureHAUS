@@ -7,7 +7,7 @@ import { Color, BaseChartDirective, Label } from 'ng2-charts';
 @Component({
   selector: 'panel-component',
   templateUrl: './panel.component.html',
-  styleUrls: ['./panel.component.css']
+  styleUrls: ['./panel.component.scss']
 })
 export class PanelComponent implements OnInit {
 

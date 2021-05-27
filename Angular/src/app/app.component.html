@@ -1,8 +1,10 @@
-<mat-toolbar  *ngIf="isUser">
-    <button mat-button routerLink="/control">Control House</button>
-    <button mat-button routerLink="/info">Power Information</button>
-    <button mat-button routerLink="/ar">Augmented Reality</button>
-    <button mat-button (click)="logout()">Logout </button>
-</mat-toolbar>
-  
-<router-outlet></router-outlet>
+<div>
+    <mat-toolbar *ngIf="isUser">
+        <button mat-button routerLink="/control">Control House</button>
+        <button mat-button routerLink="/info">Power Information</button>
+        <button mat-button routerLink="/ar">Augmented Reality</button>
+        <button mat-button (click)="logout()">Logout </button>
+    </mat-toolbar>
+
+    <router-outlet></router-outlet>
+</div>

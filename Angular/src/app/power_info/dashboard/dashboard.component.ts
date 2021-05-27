@@ -1,13 +1,11 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
-import theme from 'highcharts/themes/dark-unica'; 
-// theme(this);
 
 @Component({
   selector: 'dash-component',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent {
   /** Based on the screen size, switch from standard to one column per row */
@@ -22,15 +20,17 @@ export class DashboardComponent {
 
         };
       }
- 
+      
+      //cols = what column, rows = how many rows it spans. 
      return {
         columns: 3,
-        power: { cols: 3, rows: 1 },
-        battery: { cols: 1, rows: 2 },
-        weather: {cols: 2, rows: 2 }
+        power: { cols: 3, rows: 2 },
+        battery: { cols: 1, rows: 1 },
+        weather: {cols: 2, rows: 1 }
       };
     })
   );
 
-  constructor(private breakpointObserver: BreakpointObserver) { }
+  constructor(private breakpointObserver: BreakpointObserver
+    ) { }
 }

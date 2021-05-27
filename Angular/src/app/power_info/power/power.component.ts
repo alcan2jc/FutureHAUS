@@ -1,89 +1,72 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-
-import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
-import { Color, BaseChartDirective, Label } from 'ng2-charts';
-// import * as pluginAnnotations from 'chartjs-plugin-annotation';
+import { Component, OnInit } from '@angular/core';
+import * as Highcharts from "highcharts";
+import theme from 'highcharts/themes/dark-unica';
+theme(Highcharts);
 
 @Component({
   selector: 'power-component',
   templateUrl: './power.component.html',
-  styleUrls: ['./power.component.css']
+  styleUrls: ['./power.component.scss']
 })
 export class PowerComponent implements OnInit {
 
-  public lineChartData: ChartDataSets[] = [
-    { data: [65, 59, 80, 81], label: 'Power Production' },
-    { data: [28, 48, 40, 19], label: 'Power Consumption' },
-    { data: [65 - 28, 59 - 48, 80 - 49, 81 - 19],  label: 'Net Power'}
-  ];
-
-  public lineChartLabels: Label[] = ['January', 'February', 'March', 
-  'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-  public lineChartOptions: (ChartOptions & { annotation: any }) = {
-    responsive: true,
-    scales: {
-      // We use this empty structure as a placeholder for dynamic theming.
-      xAxes: [{}],
-      yAxes: [
-        {
-          id: 'y-axis-0',
-          position: 'left',
-        },
-      ]
-    },
-    annotation: {
-      annotations: [
-        {
-          type: 'line',
-          mode: 'vertical',
-          scaleID: 'x-axis-0',
-          value: 'March',
-          borderColor: 'orange',
-          borderWidth: 2,
-          label: {
-            enabled: true,
-            fontColor: 'orange',
-            content: 'LineAnno'
-          }
-        },
-      ],
-    },
-  };
-  public lineChartColors: Color[] = [
-    { //Power Production
-      backgroundColor: 'rgba(148,159,177,0.2)',
-      borderColor: 'green',
-      pointBackgroundColor: 'rgba(148,159,177,1)',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(148,159,177,0.8)'
-    },
-    { // Power Consumption
-      backgroundColor: 'rgba(148,159,177,0.2)',
-      borderColor: 'red',
-      pointBackgroundColor: 'rgba(148,159,177,1)',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(148,159,177,0.8)'
-    }, 
-    { // Net Power
-      backgroundColor: 'rgba(148,159,177,0.2)',
-      borderColor: 'blue',
-      pointBackgroundColor: 'rgba(148,159,177,1)',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(148,159,177,0.8)'
-    }
-  ];
-  public lineChartLegend = true;
-  public lineChartType: ChartType = 'line';
-  // public lineChartPlugins = [pluginAnnotations];
-
-  @ViewChild(BaseChartDirective, { static: true }) chart: BaseChartDirective;
-
   constructor() { }
+  stretch;
+  Highcharts: typeof Highcharts = Highcharts;
 
-  ngOnInit(): void {
+  chartOptions: Highcharts.Options = {
+    chart: {
+      type: 'area'
+  },
+  title: {
+      text: 'Power Production/Consumption'
+  },
+  xAxis: {
+      categories: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+      max: 11,
+  },
+  yAxis: {
+      title: {
+          text: 'Monthly Average (KwH)'
+      },
+      labels: {
+          formatter: function () {
+              return (Number(this.value)).toString();
+          }
+      }
+  },
+  plotOptions: {
+      area: {
+          marker: {
+              enabled: false,
+              symbol: 'circle',
+              radius: 2,
+              states: {
+                  hover: {
+                      enabled: true
+                  }
+              }
+          }
+      }
+  },
+  series: [{
+      name: 'Production',
+      type: undefined,
+      data: [
+          20434, 24126, 27387, 29459, 31056, 31982, 32040, 31233, 29224, 27342,
+          26662, 26956
+      ],
+  }, {
+      name: 'Consumption',
+      type: undefined,
+      data: [
+          11643, 13092, 14478, 15915, 17385, 19055, 21205, 23044, 25393, 27935,
+          30062, 32049
+      ]
+  }]
   }
 
+  ngOnInit(): void {
+    this.stretch = "width: " + (window.screen.width - 200).toString() + "px; " + "height: " + 500 + "px; display: block;";
+  }
 }

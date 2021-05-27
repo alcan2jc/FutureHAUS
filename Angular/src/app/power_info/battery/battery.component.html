@@ -1,6 +1,1 @@
-<div style="display: block">
-    <canvas baseChart [data]="chartData" [labels]="chartLabels" chartType="doughnut" [colors]="colors"
-     [options]="chartOptions">
-    </canvas>
-    <button mat-button (click)=update()>update</button>
-</div>
+<highcharts-chart [Highcharts]="Highcharts" [(update)]="updateFlag" [options]="gaugeOptions" style="width: 100%; height: 250px; display: block; justify-content: top;" ></highcharts-chart>

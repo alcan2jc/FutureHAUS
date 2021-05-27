@@ -15,8 +15,12 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
   },
+  "include": [
+    "src",
+    "node_modules/@types/puppeteer/index.d.ts"
+  ],
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false
   }
