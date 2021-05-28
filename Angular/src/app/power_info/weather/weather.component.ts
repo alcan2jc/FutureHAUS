@@ -8,6 +8,8 @@ theme(Highcharts);
 interface Data {
   time: string[]
   temp: number[]
+  days: string[]
+  symbols
 }
 
 @Component({
@@ -19,6 +21,8 @@ export class WeatherComponent implements OnInit {
 
   dates: string[];
   temps: number[];
+  days: string[];
+  symbols;
   updateFlag;
   constructor() { }
   Highcharts: typeof Highcharts = Highcharts;
@@ -26,7 +30,7 @@ export class WeatherComponent implements OnInit {
   chartOptions: Highcharts.Options = {
     chart: {
       plotBorderWidth: 1,
-      width: 1150,
+      width: 890,
       height: 250,
       alignTicks: false,
       scrollablePlotArea: {
@@ -43,7 +47,7 @@ export class WeatherComponent implements OnInit {
       }
     },
 
-    xAxis: {
+    xAxis: [{
       // type: 'datetime',
       // tickInterval: 2 * 3600 * 1000, // two hours
       // minorTickInterval: 3600 * 1000, // one hour
@@ -62,7 +66,16 @@ export class WeatherComponent implements OnInit {
       // crosshair: true
 
       categories: [""]
-    },
+    }, {
+      categories: [""],
+      opposite: true,
+      labels: {
+        format: '{value:<span style="font-size: 12px; font-weight: bold">%a</span> %b %e}',
+        align: 'left',
+        x: 3,
+        y: -5
+      },
+    }],
 
     yAxis: {
       title: {
@@ -99,7 +112,7 @@ export class WeatherComponent implements OnInit {
       },
       tooltip: {
         pointFormat: '<span style="color:{point.color}">\u25CF</span> ' +
-          '{series.name}: <b>{point.value}°F</b><br/>'
+          '{series.name}: <b>{point.y}°F</b><br/>'
       },
       zIndex: 1,
       color: '#FF3333',
@@ -116,9 +129,24 @@ export class WeatherComponent implements OnInit {
     this.getData().then((data) => {
       this.dates = data.time;
       this.temps = data.temp;
-      this.chartOptions.xAxis = {
+      this.days = data.days;
+      this.chartOptions.xAxis = [{
         categories: this.dates
-      }
+      }, {
+        linkedTo: 0,
+        categories: this.days,
+        opposite: true,
+        labels: {
+          format: '{value:<span style="font-size: 12px; font-weight: bold">%a</span> %b %e}',
+          align: 'center',
+          x: 3,
+          y: -5,
+          rotation: 0,
+          overflow: "allow"
+        },
+        tickLength: 20,
+        gridLineWidth: 1
+      }]
 
       this.chartOptions.series = [{
         name: "Temperature",
@@ -134,7 +162,7 @@ export class WeatherComponent implements OnInit {
         },
         tooltip: {
           pointFormat: '<span style="color:{point.color}">\u25CF</span> ' +
-            '{series.name}: <b>{point.value}°F</b><br/>'
+            '{series.name}: <b>{point.y}°F</b><br/>'
         },
         zIndex: 1,
         color: '#FF3333',
@@ -152,24 +180,48 @@ export class WeatherComponent implements OnInit {
         const document = parse(text);
         let hours = [];
         let tmps = [];
-        let items = document.querySelectorAll('.DetailsSummary--tempValue--RcZzi');
-
+        let days = [];
+        let symbols = [];
+        let index = 1;
+        let items = document.querySelectorAll('.HourlyForecast--DisclosureList--OznTI');
         items.forEach((item) => {
-          tmps.push(
-            Number(item.innerHTML.substr(0, item.innerHTML.indexOf('°')))
-          );
-        });
+          let day = item.querySelectorAll('.HourlyForecast--longDate--3khKr');
+          days.push(day[0].innerHTML);
+          let temps = item.querySelectorAll('.DetailsSummary--tempValue--RcZzi');
+          temps.forEach((temp) => {
+            tmps.push(
+              Number(temp.innerHTML.substr(0, temp.innerHTML.indexOf('°')))
+            );
+          });
 
-        items = document.querySelectorAll('.DetailsSummary--daypartName--1Mebr');
-        items.forEach((item) => {
-          hours.push(
-            item.innerHTML
-          );
-        });
+          let times = item.querySelectorAll('.DetailsSummary--daypartName--1Mebr');
+
+          times.forEach((time) => {
+            hours.push(
+              time.innerHTML
+            );
+            console.log(time.innerHTML === "12 am");
+            if (time.innerHTML === "12 am") {
+              days.push(day[index].innerHTML);
+              index++;
+            } else {
+              days.push("");
+            }
+          });
+          days.shift();
+          console.log(days.length);
+          console.log(hours.length);
+        })
+
+
+
+
 
         let res: Data = {
           time: hours,
           temp: tmps,
+          days: days,
+          symbols: null
         }
 
         return resolve(res);
@@ -178,4 +230,30 @@ export class WeatherComponent implements OnInit {
       }
     })
   }
+
+  // getData(): Promise<Data> {
+  //   return new Promise(async (resolve, reject) => {
+  //     try {
+  //       var req = new XMLHttpRequest();
+  //       req.open('GET', this.url, true);
+
+  //       console.log(req);
+  //       // const response = await fetch(this.url);
+  //       // const text = await response.text();
+  //       // const document = new DOMParser().parseFromString(req.responseXML, 'application/xml');
+  //       req.send();
+  //       let hours = [];
+  //       let tmps = [];
+  //       let symbols = [];
+
+  //       console.log(req);
+  //       console.log(req.responseXML.toString());
+
+  //       // let forecast = req.querySelector('.folder6.folder');
+  //       // console.log(forecast);
+  //     } catch (e) {
+  //       return reject(e);
+  //     }
+  //   })
+  // }
 }
