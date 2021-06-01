@@ -9,7 +9,7 @@ interface Data {
   time: string[]
   temp: number[]
   days: string[]
-  symbols
+  symbols: string[]
 }
 
 @Component({
@@ -19,15 +19,18 @@ interface Data {
 })
 export class WeatherComponent implements OnInit {
 
-  dates: string[];
+  times: string[];
   temps: number[];
   days: string[];
-  symbols;
+  symbols: string[];
   updateFlag;
   constructor() { }
   Highcharts: typeof Highcharts = Highcharts;
   url = "https://www.yr.no/place/United_States/Virginia/Blacksburg/forecast_hour_by_hour.xml";
   chartOptions: Highcharts.Options = {
+    time: {
+      useUTC: false
+    },
     chart: {
       plotBorderWidth: 1,
       width: 890,
@@ -35,6 +38,11 @@ export class WeatherComponent implements OnInit {
       alignTicks: false,
       scrollablePlotArea: {
         minWidth: 720
+      },
+      events: {
+        load() {
+          this.renderer.image('');
+        }
       }
     },
 
@@ -48,23 +56,6 @@ export class WeatherComponent implements OnInit {
     },
 
     xAxis: [{
-      // type: 'datetime',
-      // tickInterval: 2 * 3600 * 1000, // two hours
-      // minorTickInterval: 3600 * 1000, // one hour
-      // tickLength: 0,
-      // gridLineWidth: 1,
-      // gridLineColor: 'rgba(128, 128, 128, 0.1)',
-      // startOnTick: false,
-      // endOnTick: false,
-      // minPadding: 0,
-      // maxPadding: 0,
-      // offset: "30",
-      // showLastLabel: true,
-      // labels: {
-      //   format: '{value:%H}'
-      // },
-      // crosshair: true
-
       categories: [""]
     }, {
       categories: [""],
@@ -114,7 +105,6 @@ export class WeatherComponent implements OnInit {
         pointFormat: '<span style="color:{point.color}">\u25CF</span> ' +
           '{series.name}: <b>{point.y}°F</b><br/>'
       },
-      zIndex: 1,
       color: '#FF3333',
       negativeColor: '#48AFE8'
     }]
@@ -127,11 +117,19 @@ export class WeatherComponent implements OnInit {
 
   update() {
     this.getData().then((data) => {
-      this.dates = data.time;
+      this.times = data.time;
       this.temps = data.temp;
       this.days = data.days;
+      this.symbols = data.symbols;
+
       this.chartOptions.xAxis = [{
-        categories: this.dates
+        categories: this.times,
+        labels: {
+          align: 'right',
+          rotation: -45
+        },
+        tickmarkPlacement: 'on'
+
       }, {
         linkedTo: 0,
         categories: this.days,
@@ -139,18 +137,18 @@ export class WeatherComponent implements OnInit {
         labels: {
           format: '{value:<span style="font-size: 12px; font-weight: bold">%a</span> %b %e}',
           align: 'center',
-          x: 3,
-          y: -5,
+          x: 0,
+          y: -10,
           rotation: 0,
           overflow: "allow"
         },
-        tickLength: 20,
-        gridLineWidth: 1
+        tickLength: 0,
+        gridLineWidth: 2
       }]
 
       this.chartOptions.series = [{
         name: "Temperature",
-        type: 'spline',
+        type: "spline",
         data: this.temps,
         marker: {
           enabled: false,
@@ -166,8 +164,24 @@ export class WeatherComponent implements OnInit {
         },
         zIndex: 1,
         color: '#FF3333',
-        negativeColor: '#48AFE8'
+        negativeColor: '#48AFE8',
       }]
+
+      var chart = this;
+      if (this.chartOptions.series[0].type === 'spline') {
+        this.chartOptions.series[0].data.forEach((p: Highcharts.PointOptionsObject, i) => {
+          console.log(p);
+          this.chartOptions.chart.events = {
+            load() {
+              this.renderer.image('../../../assets/WeatherSymbols/Rain.svg',
+                1000, 500, 30, 30)
+                .attr({ zIndex: 5 })
+                .add();
+            }
+          }
+        })
+      }
+
       this.updateFlag = true;
     })
   }
@@ -183,45 +197,45 @@ export class WeatherComponent implements OnInit {
         let days = [];
         let symbols = [];
         let index = 1;
-        let items = document.querySelectorAll('.HourlyForecast--DisclosureList--OznTI');
-        items.forEach((item) => {
-          let day = item.querySelectorAll('.HourlyForecast--longDate--3khKr');
-          days.push(day[0].innerHTML);
-          let temps = item.querySelectorAll('.DetailsSummary--tempValue--RcZzi');
-          temps.forEach((temp) => {
-            tmps.push(
-              Number(temp.innerHTML.substr(0, temp.innerHTML.indexOf('°')))
-            );
-          });
 
-          let times = item.querySelectorAll('.DetailsSummary--daypartName--1Mebr');
+        let day = document.querySelectorAll('.HourlyForecast--longDate--3khKr');
+        let temps = document.querySelectorAll('.DetailsSummary--tempValue--RcZzi');
+        temps.forEach((temp) => {
+          tmps.push(
+            Number(temp.innerHTML.substr(0, temp.innerHTML.indexOf('°')))
+          );
+        });
 
-          times.forEach((time) => {
-            hours.push(
-              time.innerHTML
-            );
-            console.log(time.innerHTML === "12 am");
-            if (time.innerHTML === "12 am") {
-              days.push(day[index].innerHTML);
-              index++;
-            } else {
-              days.push("");
-            }
-          });
-          days.shift();
-          console.log(days.length);
-          console.log(hours.length);
+        let times = document.querySelectorAll('.DetailsSummary--daypartName--1Mebr');
+
+        times.forEach((time) => {
+          hours.push(
+            time.innerHTML
+          );
+
+          let condition = Number(times[0].innerHTML.substr(0, times[0].innerHTML.indexOf(' ')));
+          if (condition % 2 === 0 && time.innerHTML === "12 am") {
+            console.log(day);
+            days.push(day[index].innerHTML);
+            index++;
+          } else if (condition % 2 === 1 && time.innerHTML === "1 am") {
+            days.push(day[index].innerHTML);
+            index++;
+          } else {
+            days.push("");
+          }
+        });
+
+        let images = document.querySelectorAll('.DetailsSummary--condition--mqdxh svg');
+        images.forEach((image) => {
+          symbols.push(image.innerText);
         })
-
-
-
-
 
         let res: Data = {
           time: hours,
           temp: tmps,
           days: days,
-          symbols: null
+          symbols: symbols
         }
 
         return resolve(res);
@@ -230,30 +244,4 @@ export class WeatherComponent implements OnInit {
       }
     })
   }
-
-  // getData(): Promise<Data> {
-  //   return new Promise(async (resolve, reject) => {
-  //     try {
-  //       var req = new XMLHttpRequest();
-  //       req.open('GET', this.url, true);
-
-  //       console.log(req);
-  //       // const response = await fetch(this.url);
-  //       // const text = await response.text();
-  //       // const document = new DOMParser().parseFromString(req.responseXML, 'application/xml');
-  //       req.send();
-  //       let hours = [];
-  //       let tmps = [];
-  //       let symbols = [];
-
-  //       console.log(req);
-  //       console.log(req.responseXML.toString());
-
-  //       // let forecast = req.querySelector('.folder6.folder');
-  //       // console.log(forecast);
-  //     } catch (e) {
-  //       return reject(e);
-  //     }
-  //   })
-  // }
 }
