@@ -8,12 +8,11 @@ import * as cocoSSD from "@tensorflow-models/coco-ssd";
 })
 export class ARComponent implements OnInit {
   @ViewChild('videoElement') videoElement: ElementRef;
-  video: any;
+  video: HTMLVideoElement;
   constructor() { }
 
   ngOnInit(): void {
     this.initCamera({ video: true, audio: false });
-    this.predictWithCocoModel();
   }
 
   initCamera(config: any) {
@@ -28,8 +27,9 @@ export class ARComponent implements OnInit {
       this.videoElement.nativeElement.srcObject = stream;
       this.videoElement.nativeElement.onloadedmetadata = () => {
         this.videoElement.nativeElement.play();
+        this.video = this.videoElement.nativeElement;
+        this.predictWithCocoModel();
       };
-      this.video = this.videoElement.nativeElement;
     });
   }
 
@@ -50,14 +50,16 @@ export class ARComponent implements OnInit {
     const canvas = <HTMLCanvasElement>document.getElementById("canvas");
 
     const ctx = canvas.getContext("2d");
-    canvas.width = 300;
-    canvas.height = 300;
+    canvas.width = 500;
+    canvas.height = 500;
+    canvas.style.width = '500px';
+    canvas.style.height = '500px';
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     // Fonts
     const font = "16px sans-serif";
     ctx.font = font;
     ctx.textBaseline = "top";
-    ctx.drawImage(this.video, 0, 0, 300, 300);
+    ctx.drawImage(this.video, 0, 0, 500, 500);
     predictions.forEach(prediction => {
       const x = prediction.bbox[0];
       const y = prediction.bbox[1];

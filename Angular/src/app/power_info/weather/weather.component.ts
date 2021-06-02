@@ -31,6 +31,7 @@ export class WeatherComponent implements OnInit {
   days: string[];
   symbols: string[];
   location: string;
+  stretch: string;
   updateFlag;
 
   constructor() { }
@@ -42,7 +43,7 @@ export class WeatherComponent implements OnInit {
     },
     chart: {
       plotBorderWidth: 1,
-      width: 890,
+      width: (window.screen.width * .6),
       height: 250,
       alignTicks: false,
       scrollablePlotArea: {
@@ -248,7 +249,6 @@ export class WeatherComponent implements OnInit {
           location: loc
         }
 
-        console.log(res);
         return resolve(res);
       } catch (e) {
         return reject(e);
