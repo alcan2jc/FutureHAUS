@@ -10,7 +10,14 @@ interface Data {
   temp: number[]
   days: string[]
   symbols: string[]
+  location: string
 }
+
+interface PlottablePoint extends Highcharts.Point {
+  plotX: number;
+  plotY: number;
+}
+
 
 @Component({
   selector: 'weather-component',
@@ -23,10 +30,12 @@ export class WeatherComponent implements OnInit {
   temps: number[];
   days: string[];
   symbols: string[];
+  location: string;
   updateFlag;
+
   constructor() { }
   Highcharts: typeof Highcharts = Highcharts;
-  url = "https://www.yr.no/place/United_States/Virginia/Blacksburg/forecast_hour_by_hour.xml";
+
   chartOptions: Highcharts.Options = {
     time: {
       useUTC: false
@@ -38,20 +47,6 @@ export class WeatherComponent implements OnInit {
       alignTicks: false,
       scrollablePlotArea: {
         minWidth: 720
-      },
-      events: {
-        load() {
-          this.renderer.image('');
-        }
-      }
-    },
-
-    title: {
-      text: 'Weather',
-      align: 'left',
-      style: {
-        whiteSpace: 'nowrap',
-        textOverflow: 'ellipsis'
       }
     },
 
@@ -67,6 +62,10 @@ export class WeatherComponent implements OnInit {
         y: -5
       },
     }],
+
+    // xAxis: [{
+    //   categories: [""]
+    // }],
 
     yAxis: {
       title: {
@@ -113,6 +112,23 @@ export class WeatherComponent implements OnInit {
   ngOnInit(): void {
     this.updateFlag = false;
     this.update();
+    let weather = this;
+
+    //Weather symbols from https://cdn.jsdelivr.net/gh/YR/weather-symbols@6.0.2/dist/svg/
+    this.chartOptions.chart.events = {
+      render() {
+        this.series[0].data.forEach((p: PlottablePoint, i) => {
+          if (i % 2 == 0 && weather.symbols) {
+            this.renderer.image('../../../assets/WeatherSymbols/' + weather.symbols[i] + '.svg',
+              p.plotX + this.plotLeft - 20, p.plotY + this.plotTop - 30, 30, 30)
+              .attr({
+                zIndex: 5
+              })
+              .add();
+          }
+        })
+      }
+    }
   }
 
   update() {
@@ -121,30 +137,39 @@ export class WeatherComponent implements OnInit {
       this.temps = data.temp;
       this.days = data.days;
       this.symbols = data.symbols;
+      this.location = data.location;
 
-      this.chartOptions.xAxis = [{
-        categories: this.times,
-        labels: {
-          align: 'right',
-          rotation: -45
-        },
-        tickmarkPlacement: 'on'
+      this.chartOptions.title = {
+        text: 'Weather for ' + this.location,
+        align: 'left',
+        style: {
+          whiteSpace: 'nowrap',
+          textOverflow: 'ellipsis'
+        }
+      },
+        this.chartOptions.xAxis = [{
+          categories: this.times,
+          labels: {
+            align: 'right',
+            rotation: -45
+          },
+          tickmarkPlacement: 'on'
 
-      }, {
-        linkedTo: 0,
-        categories: this.days,
-        opposite: true,
-        labels: {
-          format: '{value:<span style="font-size: 12px; font-weight: bold">%a</span> %b %e}',
-          align: 'center',
-          x: 0,
-          y: -10,
-          rotation: 0,
-          overflow: "allow"
-        },
-        tickLength: 0,
-        gridLineWidth: 2
-      }]
+        }, {
+          linkedTo: 0,
+          categories: this.days,
+          opposite: true,
+          labels: {
+            format: '{value:<span style="font-size: 12px; font-weight: bold">%a</span> %b %e}',
+            align: 'center',
+            x: 0,
+            y: -10,
+            rotation: 0,
+            overflow: "allow"
+          },
+          tickLength: 0,
+          gridLineWidth: 2
+        }]
 
       this.chartOptions.series = [{
         name: "Temperature",
@@ -166,22 +191,6 @@ export class WeatherComponent implements OnInit {
         color: '#FF3333',
         negativeColor: '#48AFE8',
       }]
-
-      var chart = this;
-      if (this.chartOptions.series[0].type === 'spline') {
-        this.chartOptions.series[0].data.forEach((p: Highcharts.PointOptionsObject, i) => {
-          console.log(p);
-          this.chartOptions.chart.events = {
-            load() {
-              this.renderer.image('../../../assets/WeatherSymbols/Rain.svg',
-                1000, 500, 30, 30)
-                .attr({ zIndex: 5 })
-                .add();
-            }
-          }
-        })
-      }
-
       this.updateFlag = true;
     })
   }
@@ -196,11 +205,12 @@ export class WeatherComponent implements OnInit {
         let tmps = [];
         let days = [];
         let symbols = [];
+        let loc = "";
         let index = 1;
 
+        loc = document.querySelector('.LocationPageTitle--PresentationName--Injxu').innerHTML;
         let day = document.querySelectorAll('.HourlyForecast--longDate--3khKr');
-        let temps = document.querySelectorAll('.DetailsSummary--tempValue--RcZzi');
-        temps.forEach((temp) => {
+        document.querySelectorAll('.DetailsSummary--tempValue--RcZzi').forEach((temp) => {
           tmps.push(
             Number(temp.innerHTML.substr(0, temp.innerHTML.indexOf('°')))
           );
@@ -215,7 +225,6 @@ export class WeatherComponent implements OnInit {
 
           let condition = Number(times[0].innerHTML.substr(0, times[0].innerHTML.indexOf(' ')));
           if (condition % 2 === 0 && time.innerHTML === "12 am") {
-            console.log(day);
             days.push(day[index].innerHTML);
             index++;
           } else if (condition % 2 === 1 && time.innerHTML === "1 am") {
@@ -235,9 +244,11 @@ export class WeatherComponent implements OnInit {
           time: hours,
           temp: tmps,
           days: days,
-          symbols: symbols
+          symbols: symbols,
+          location: loc
         }
 
+        console.log(res);
         return resolve(res);
       } catch (e) {
         return reject(e);
@@ -245,3 +256,4 @@ export class WeatherComponent implements OnInit {
     })
   }
 }
+
