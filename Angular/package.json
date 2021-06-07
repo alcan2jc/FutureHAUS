@@ -19,7 +19,8 @@
     "readline": false,
     "stream": false,
     "tls": false,
-    "zlib": false
+    "zlib": false,
+    "crypto": false
   },
   "dependencies": {
     "@angular/animations": "^11.2.8",
@@ -42,6 +43,7 @@
     "highcharts-angular": "^2.10.0",
     "igniteui-angular": "^11.1.7",
     "igniteui-cli": "^7.1.1",
+    "lodash-es": "^4.17.21",
     "ng2-charts": "2.3.0",
     "node-html-parser": "^3.3.4",
     "rxjs": "^6.6.7",

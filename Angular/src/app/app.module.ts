@@ -32,9 +32,10 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { LayoutModule } from '@angular/cdk/layout';
 import { DashboardComponent } from './power_info/dashboard/dashboard.component';
-import { CardComponent } from './power_info/card/card.component';
 import { HighchartsChartModule } from 'highcharts-angular';
 import {MatListModule} from '@angular/material/list';
+import { MoneyComponent } from './power_info/money/money.component';
+import { ProducedComponent } from './power_info/produced/produced.component';
 
 @NgModule({
   declarations: [
@@ -50,8 +51,9 @@ import {MatListModule} from '@angular/material/list';
     InverterComponent,
     InfoComponent,
     DashboardComponent,
-    CardComponent,
     WeatherComponent,
+    MoneyComponent,
+    ProducedComponent,
   ],
   imports: [
     BrowserModule,

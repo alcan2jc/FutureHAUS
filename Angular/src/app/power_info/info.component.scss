@@ -15,3 +15,9 @@
 .dark {
     background-color: #121212;
 }
+
+@media screen and (orientation: portrait) {
+    .mat-toolbar {
+        display: none;
+    }
+}

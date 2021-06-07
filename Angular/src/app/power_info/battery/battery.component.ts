@@ -5,7 +5,6 @@ import HighchartsSolidGauge from 'highcharts/modules/solid-gauge';
 import theme from 'highcharts/themes/dark-unica';
 import { interval, Subscription } from 'rxjs';
 
-
 HighchartsMore(Highcharts);
 HighchartsSolidGauge(Highcharts);
 theme(Highcharts);
@@ -28,16 +27,20 @@ export class BatteryComponent implements OnInit {
   gaugeOptions: Highcharts.Options = {
 
     chart: {
-      type: 'solidgauge'
+      type: 'solidgauge',
+      width: (window.screen.width / 3),
+      height: (window.screen.height / 5) * .9,
+      backgroundColor: "#2a2a2b"
     },
 
     title: {
-      text: 'Battery Voltage'
+      text: 'Battery Voltage',
+      style: { fontSize: "50px" }
     },
 
     pane: {
-      center: ['50%', '85%'],
-      size: '140%',
+      center: ['50%', '60%'],
+      size: '90%',
       startAngle: -90,
       endAngle: 90,
       background: [{
@@ -60,10 +63,6 @@ export class BatteryComponent implements OnInit {
     yAxis: {
       min: 0,
       max: 52.6,
-      title: {
-        text: 'Voltage',
-        y: -70
-      },
       stops: [
         [0.1, '#DF5353'], // red
         [0.9, '#55BF3B'] // green
@@ -75,7 +74,7 @@ export class BatteryComponent implements OnInit {
       tickAmount: 5,
       tickInterval: (3),
       labels: {
-        y: 15
+        y: 0
       }
     },
 
@@ -129,7 +128,7 @@ export class BatteryComponent implements OnInit {
           '</div>'
       },
     }]
-    this.updateFlag=true;
+    this.updateFlag = true;
   }
 
   ngOnDestroy() {

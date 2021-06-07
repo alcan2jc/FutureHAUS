@@ -55,7 +55,19 @@
             ],
             "scripts": [
               "node_modules/chart.js/dist/Chart.bundle.min.js"
-            ]
+            ],
+            "allowedCommonJsDependencies": [
+              "highcharts",
+              "highcharts/highcharts-more",
+              "highcharts/themes/dark-unica",
+              "highcharts/modules/solid-gauge",
+              "@tensorflow-models/coco-ssd",
+              "chart.js",
+              "he",
+              "css-select",
+              "seedrandom",
+              "lodash"
+           ]
           },
           "configurations": {
             "production": {

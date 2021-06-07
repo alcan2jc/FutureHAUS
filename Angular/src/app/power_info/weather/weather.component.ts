@@ -3,6 +3,7 @@ import * as Highcharts from "highcharts";
 import theme from 'highcharts/themes/dark-unica';
 // import { WeatherService } from "../../_services/weather.service";
 import { parse } from 'node-html-parser';
+import { interval, Subscription } from 'rxjs';
 theme(Highcharts);
 
 interface Data {
@@ -33,22 +34,24 @@ export class WeatherComponent implements OnInit {
   location: string;
   stretch: string;
   updateFlag;
+  subscription: Subscription;
+  polltime;
 
   constructor() { }
   Highcharts: typeof Highcharts = Highcharts;
 
   chartOptions: Highcharts.Options = {
+    title: {
+      text: "Loading..."
+    },
     time: {
       useUTC: false
     },
     chart: {
       plotBorderWidth: 1,
-      width: (window.screen.width * .6),
-      height: 250,
-      alignTicks: false,
-      scrollablePlotArea: {
-        minWidth: 720
-      }
+      width: (window.screen.width),
+      height: (window.screen.height) * (2 / 5) * .9,
+      alignTicks: true,
     },
 
     xAxis: [{
@@ -63,10 +66,6 @@ export class WeatherComponent implements OnInit {
         y: -5
       },
     }],
-
-    // xAxis: [{
-    //   categories: [""]
-    // }],
 
     yAxis: {
       title: {
@@ -111,28 +110,41 @@ export class WeatherComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.updateFlag = false;
+    // this.locationLoaded();
+    this.polltime = interval(15 * 60 * 60 * 60);
     this.update();
-    let weather = this;
+    this.subscription = this.polltime.subscribe(() => {
+      this.update();
+    });
 
+    let weather = this;
     //Weather symbols from https://cdn.jsdelivr.net/gh/YR/weather-symbols@6.0.2/dist/svg/
     this.chartOptions.chart.events = {
       render() {
         this.series[0].data.forEach((p: PlottablePoint, i) => {
-          if (i % 2 == 0 && weather.symbols) {
-            this.renderer.image('../../../assets/WeatherSymbols/' + weather.symbols[i] + '.svg',
+          if (weather.symbols[i] !== "" && p.category !== "") {
+            var image = this.renderer.image('../../../assets/WeatherSymbols/' + weather.symbols[i] + '.svg',
               p.plotX + this.plotLeft - 20, p.plotY + this.plotTop - 30, 30, 30)
               .attr({
                 zIndex: 5
               })
               .add();
+
+            setTimeout(function () {
+              image.destroy();
+            }, 15 * 60 * 60 * 60);
           }
         })
       }
     }
   }
 
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
   update() {
+    this.updateFlag = false;
     this.getData().then((data) => {
       this.times = data.time;
       this.temps = data.temp;
@@ -193,15 +205,48 @@ export class WeatherComponent implements OnInit {
         negativeColor: '#48AFE8',
       }]
       this.updateFlag = true;
+
     })
+  }
+
+  async locationLoaded() {
+    let response = await fetch("https://weather.com");
+    // let text = await response.text();
+    // let document = parse(text);
+    let el;
+    let link;
+    var locationLoaded = setInterval(async function () {
+      let text = await response.text();
+      let document = parse(text);
+      console.log(document.querySelector('.styles--weatherData--3jR-p.Button--default--2yeqQ'));
+      clearInterval(locationLoaded);
+      // if (el = document.querySelector('.styles--weatherData--3jR-p.Button--default--2yeqQ')) {
+      //   link = el.attributes.href;
+      //   console.log(link);
+      //   // let responseLoc = await fetch("https://weather.com" + link);
+      //   // text = await responseLoc.text();
+      //   // document = parse(text);
+
+      //   clearInterval(locationLoaded);
+      // }
+    }, 5000); // check every 100ms 
   }
 
   getData(): Promise<Data> {
     return new Promise(async (resolve, reject) => {
       try {
-        const response = await fetch("https://weather.com/weather/hourbyhour/l/f32f2d2e3156f59f830e0ec31299d884965f61dafac4c7b472390cfc20f076a0");
-        const text = await response.text();
-        const document = parse(text);
+
+        let responseLoc = await fetch("https://weather.com/weather/hourbyhour/l/f32f2d2e3156f59f830e0ec31299d884965f61dafac4c7b472390cfc20f076a0");
+        let text = await responseLoc.text();
+        let document = parse(text);
+
+        // const instance: phantom.PhantomJS = await phantom.create();
+        // const page: phantom.WebPage = await instance.createPage();
+        // const status: string = await page.open("https://weather.com/weather/hourbyhour/l/f32f2d2e3156f59f830e0ec31299d884965f61dafac4c7b472390cfc20f076a0");
+        // const content = await page.property('content');
+        // console.log(content);
+        // await instance.exit();
+
         let hours = [];
         let tmps = [];
         let days = [];
@@ -237,8 +282,12 @@ export class WeatherComponent implements OnInit {
         });
 
         let images = document.querySelectorAll('.DetailsSummary--condition--mqdxh svg');
-        images.forEach((image) => {
-          symbols.push(image.innerText);
+        images.forEach((image, i) => {
+          if (i % 2 == 0) {
+            symbols.push(image.innerText);
+          } else {
+            symbols.push("");
+          }
         })
 
         let res: Data = {

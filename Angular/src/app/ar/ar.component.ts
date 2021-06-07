@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import * as cocoSSD from "@tensorflow-models/coco-ssd";
+import { timer } from 'rxjs';
 
 @Component({
   selector: 'app-ar',
@@ -9,6 +10,9 @@ import * as cocoSSD from "@tensorflow-models/coco-ssd";
 export class ARComponent implements OnInit {
   @ViewChild('videoElement') videoElement: ElementRef;
   video: HTMLVideoElement;
+  interval;
+  subscribeTimer: any;
+  timer: number;
   constructor() { }
 
   ngOnInit(): void {
@@ -46,21 +50,37 @@ export class ARComponent implements OnInit {
       });
     });
   }
+
+  observableTimer() {
+    const source = timer(1000, 2000);
+    const abc = source.subscribe(val => {
+      this.subscribeTimer = val;
+    });
+  }
+
+  startTimer() {
+    this.interval = setInterval(() => {
+      this.timer++;
+    },1000)
+  }
+
   renderPredictions = predictions => {
     const canvas = <HTMLCanvasElement>document.getElementById("canvas");
-
+    
     const ctx = canvas.getContext("2d");
-    canvas.width = 500;
-    canvas.height = 500;
-    canvas.style.width = '500px';
-    canvas.style.height = '500px';
+    canvas.width = 750;
+    canvas.height = 750;
+    canvas.style.width = '750px';
+    canvas.style.height = '750px';
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     // Fonts
     const font = "16px sans-serif";
     ctx.font = font;
     ctx.textBaseline = "top";
-    ctx.drawImage(this.video, 0, 0, 500, 500);
+    ctx.drawImage(this.video, 0, 0, 750, 750);
     predictions.forEach(prediction => {
+
+      
       const x = prediction.bbox[0];
       const y = prediction.bbox[1];
       const width = prediction.bbox[2];

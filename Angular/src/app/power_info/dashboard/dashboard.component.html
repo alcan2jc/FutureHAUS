@@ -1,18 +1,28 @@
 <!--dash.component.html-->
 <div class="darkMode">
   <div #content class="grid-container">
-    <h1 class="mat-h1" style="color: white">Dashboard</h1>
-    <mat-grid-list cols="{{ ( cardLayout | async )?.columns }}" rowHeight="240px" [gutterSize]="'10px'">
-      <mat-grid-tile [colspan]="( cardLayout | async )?.power.cols" [rowspan]="( cardLayout | async )?.power.rows">
-          <power-component></power-component>
-      </mat-grid-tile>
+    <!-- <h1 class="mat-h1" style="color: white">Dashboard</h1> -->
+    <mat-grid-list cols="{{ ( cardLayout | async )?.columns }}" [rowHeight]="rowHeightStr" [gutterSize]="'10px'">
 
-      <mat-grid-tile class="battery-tile" [colspan]="( cardLayout | async )?.battery.cols" [rowspan]="( cardLayout | async )?.battery.rows">
+        <mat-grid-tile [colspan]="( cardLayout | async )?.battery.cols" [rowspan]="( cardLayout | async )?.battery.rows">
           <battery-component></battery-component>
-      </mat-grid-tile>
+        </mat-grid-tile>
+        
+        <mat-grid-tile [colspan]="( cardLayout | async )?.money.cols" [rowspan]="( cardLayout | async )?.money.rows">
+            <money-component [numRows]="numRows"></money-component>
+        </mat-grid-tile>
 
-      <mat-grid-tile class="weather-tile" [colspan]="( cardLayout | async )?.weather.cols" [rowspan]="( cardLayout | async )?.weather.rows">
-        <weather-component></weather-component>
+        <mat-grid-tile  [colspan]="( cardLayout | async )?.temp.cols" [rowspan]="( cardLayout | async )?.temp.rows">
+          <produced-component [numRows]="numRows"></produced-component>
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="( cardLayout | async )?.power.cols" [rowspan]="( cardLayout | async )?.power.rows">
+          <power-component></power-component>
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="( cardLayout | async )?.weather.cols"
+          [rowspan]="( cardLayout | async )?.weather.rows">
+          <weather-component></weather-component>
       </mat-grid-tile>
     </mat-grid-list>
   </div>

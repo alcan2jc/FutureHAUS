@@ -1,0 +1,29 @@
+
+.mat-card {
+    position: absolute;
+    top: 11px;
+    left: 11px;
+    right: 11px;
+    bottom: 11px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 0px;
+    background-color: #2a2a2b;
+    justify-content: top;
+    align-items: center;
+    width:auto;
+}
+.value-text {
+    stroke-width: 0;
+    text-align: center;
+    color: white;
+    display: grid;
+}
+
+.avatar-icon {
+    transform: scale(2);
+    color: green;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
