@@ -11,18 +11,19 @@ export class ProducedComponent implements OnInit {
   constructor() { }
 
   electricity: number;
-  spacer: string;
+  lastWeekElectricity: number;
   @Input() numRows: number;
+  style: string;
   subscription: Subscription;
   polltime;
 
   ngOnInit(): void {
-    this.polltime = interval(3000);
+    this.style = "width: " + (window.screen.width / 3) + "px;";
+    this.polltime = interval(3500);
     this.electricity = Math.floor(Math.random() * 50);
+    this.lastWeekElectricity = 70;
     this.subscription = this.polltime.subscribe(() => {
       this.electricity += Math.random() * 2;
     });
-    this.spacer = "padding-bottom: " + ((window.screen.height / this.numRows) / 4).toString() + 'px;';
   }
-
 }

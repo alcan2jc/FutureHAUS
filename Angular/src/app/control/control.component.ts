@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { MqttService } from 'ngx-mqtt';
+import { Subscription } from 'rxjs';
+
 
 @Component({
   selector: 'app-welcome',
@@ -7,9 +10,31 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ControlComponent implements OnInit {
 
-  constructor() { }
+  private subscription: Subscription;
+  public message: string;
+  constructor(private mqtt: MqttService) {
+
+  }
 
   ngOnInit(): void {
+    // this.publish("message from website");
+  }
+
+  subscribe(topic: string) {
+    console.log("subscribed to " + topic);
+    this.subscription = this.mqtt.observe(topic).subscribe( (msg) => {
+      console.log(msg.payload.toString());
+    });
+  }
+
+  publish(msg: string) {
+    let topic = 'dev/test';
+    console.log("publishing");
+    this.mqtt.unsafePublish(topic, msg, { qos: 1, retain: true });
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   img1: string = "https://www.futurehaus.tech/assets/images/rooms/bath-206.jpg";

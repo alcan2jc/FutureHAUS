@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import * as Highcharts from "highcharts";
 import theme from 'highcharts/themes/dark-unica';
 // import { WeatherService } from "../../_services/weather.service";
 import { parse } from 'node-html-parser';
 import { interval, Subscription } from 'rxjs';
+// import * as puppeteer from 'puppeteer';
 theme(Highcharts);
 
 interface Data {
@@ -32,8 +33,8 @@ export class WeatherComponent implements OnInit {
   days: string[];
   symbols: string[];
   location: string;
-  stretch: string;
   updateFlag;
+  @Input() numRows;
   subscription: Subscription;
   polltime;
 
@@ -50,7 +51,7 @@ export class WeatherComponent implements OnInit {
     chart: {
       plotBorderWidth: 1,
       width: (window.screen.width),
-      height: (window.screen.height) * (2 / 5) * .9,
+      backgroundColor: "#272e48",
       alignTicks: true,
     },
 
@@ -110,8 +111,8 @@ export class WeatherComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.locationLoaded();
-    this.polltime = interval(15 * 60 * 60 * 60);
+    this.polltime = interval(15 * 60 * 1000);
+    // this.polltime = interval(3000);
     this.update();
     this.subscription = this.polltime.subscribe(() => {
       this.update();
@@ -119,22 +120,29 @@ export class WeatherComponent implements OnInit {
 
     let weather = this;
     //Weather symbols from https://cdn.jsdelivr.net/gh/YR/weather-symbols@6.0.2/dist/svg/
-    this.chartOptions.chart.events = {
-      render() {
-        this.series[0].data.forEach((p: PlottablePoint, i) => {
-          if (weather.symbols[i] !== "" && p.category !== "") {
-            var image = this.renderer.image('../../../assets/WeatherSymbols/' + weather.symbols[i] + '.svg',
-              p.plotX + this.plotLeft - 20, p.plotY + this.plotTop - 30, 30, 30)
-              .attr({
-                zIndex: 5
-              })
-              .add();
+    this.chartOptions.chart = {
+      plotBorderWidth: 1,
+      width: (window.screen.width),
+      height: (window.screen.height) * (2 / this.numRows) * .9,
+      backgroundColor: "#272e48",
+      alignTicks: true,
+      events: {
+        render() {
+          this.series[0].data.forEach((p: PlottablePoint, i) => {
+            if (weather.symbols[i] !== "" && p.category !== "") {
+              var image = this.renderer.image('../../../assets/WeatherSymbols/' + weather.symbols[i] + '.svg',
+                p.plotX + this.plotLeft - 20, p.plotY + this.plotTop - 30, 30, 30)
+                .attr({
+                  zIndex: 5
+                })
+                .add();
 
-            setTimeout(function () {
-              image.destroy();
-            }, 15 * 60 * 60 * 60);
-          }
-        })
+              setTimeout(function () {
+                image.destroy();
+              }, 15 * 60 * 60 * 60);
+            }
+          })
+        }
       }
     }
   }
@@ -154,35 +162,36 @@ export class WeatherComponent implements OnInit {
 
       this.chartOptions.title = {
         text: 'Weather for ' + this.location,
-        align: 'left',
+        align: 'center',
         style: {
           whiteSpace: 'nowrap',
           textOverflow: 'ellipsis'
         }
-      },
-        this.chartOptions.xAxis = [{
-          categories: this.times,
-          labels: {
-            align: 'right',
-            rotation: -45
-          },
-          tickmarkPlacement: 'on'
+      };
 
-        }, {
-          linkedTo: 0,
-          categories: this.days,
-          opposite: true,
-          labels: {
-            format: '{value:<span style="font-size: 12px; font-weight: bold">%a</span> %b %e}',
-            align: 'center',
-            x: 0,
-            y: -10,
-            rotation: 0,
-            overflow: "allow"
-          },
-          tickLength: 0,
-          gridLineWidth: 2
-        }]
+      this.chartOptions.xAxis = [{
+        categories: this.times,
+        labels: {
+          align: 'right',
+          rotation: -45
+        },
+        tickmarkPlacement: 'on'
+
+      }, {
+        linkedTo: 0,
+        categories: this.days,
+        opposite: true,
+        labels: {
+          format: '{value:<span style="font-size: 12px; font-weight: bold">%a</span> %b %e}',
+          align: 'center',
+          x: 0,
+          y: -10,
+          rotation: 0,
+          overflow: "allow"
+        },
+        tickLength: 0,
+        gridLineWidth: 2
+      }];
 
       this.chartOptions.series = [{
         name: "Temperature",
@@ -196,41 +205,13 @@ export class WeatherComponent implements OnInit {
             }
           }
         },
-        tooltip: {
-          pointFormat: '<span style="color:{point.color}">\u25CF</span> ' +
-            '{series.name}: <b>{point.y}°F</b><br/>'
-        },
-        zIndex: 1,
         color: '#FF3333',
-        negativeColor: '#48AFE8',
-      }]
+        negativeColor: '#48AFE8'
+      }];
       this.updateFlag = true;
-
     })
   }
 
-  async locationLoaded() {
-    let response = await fetch("https://weather.com");
-    // let text = await response.text();
-    // let document = parse(text);
-    let el;
-    let link;
-    var locationLoaded = setInterval(async function () {
-      let text = await response.text();
-      let document = parse(text);
-      console.log(document.querySelector('.styles--weatherData--3jR-p.Button--default--2yeqQ'));
-      clearInterval(locationLoaded);
-      // if (el = document.querySelector('.styles--weatherData--3jR-p.Button--default--2yeqQ')) {
-      //   link = el.attributes.href;
-      //   console.log(link);
-      //   // let responseLoc = await fetch("https://weather.com" + link);
-      //   // text = await responseLoc.text();
-      //   // document = parse(text);
-
-      //   clearInterval(locationLoaded);
-      // }
-    }, 5000); // check every 100ms 
-  }
 
   getData(): Promise<Data> {
     return new Promise(async (resolve, reject) => {
@@ -240,13 +221,6 @@ export class WeatherComponent implements OnInit {
         let text = await responseLoc.text();
         let document = parse(text);
 
-        // const instance: phantom.PhantomJS = await phantom.create();
-        // const page: phantom.WebPage = await instance.createPage();
-        // const status: string = await page.open("https://weather.com/weather/hourbyhour/l/f32f2d2e3156f59f830e0ec31299d884965f61dafac4c7b472390cfc20f076a0");
-        // const content = await page.property('content');
-        // console.log(content);
-        // await instance.exit();
-
         let hours = [];
         let tmps = [];
         let days = [];
@@ -254,16 +228,15 @@ export class WeatherComponent implements OnInit {
         let loc = "";
         let index = 1;
 
-        loc = document.querySelector('.LocationPageTitle--PresentationName--Injxu').innerHTML;
-        let day = document.querySelectorAll('.HourlyForecast--longDate--3khKr');
-        document.querySelectorAll('.DetailsSummary--tempValue--RcZzi').forEach((temp) => {
+        loc = document.querySelector(`[class*="LocationPageTitle--PresentationName"]`).innerHTML;
+        let day = document.querySelectorAll('[class*="HourlyForecast--longDate"]');
+        document.querySelectorAll('[class*="DetailsSummary--tempValue"]').forEach((temp) => {
           tmps.push(
             Number(temp.innerHTML.substr(0, temp.innerHTML.indexOf('°')))
           );
         });
 
-        let times = document.querySelectorAll('.DetailsSummary--daypartName--1Mebr');
-
+        let times = document.querySelectorAll('[class*="DetailsSummary--daypartName"]');
         times.forEach((time) => {
           hours.push(
             time.innerHTML
@@ -281,7 +254,7 @@ export class WeatherComponent implements OnInit {
           }
         });
 
-        let images = document.querySelectorAll('.DetailsSummary--condition--mqdxh svg');
+        let images = document.querySelectorAll('[class*="DetailsSummary--condition"] svg');
         images.forEach((image, i) => {
           if (i % 2 == 0) {
             symbols.push(image.innerText);

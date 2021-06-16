@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import * as Highcharts from "highcharts";
 import HighchartsMore from 'highcharts/highcharts-more';
 import HighchartsSolidGauge from 'highcharts/modules/solid-gauge';
@@ -18,6 +18,7 @@ theme(Highcharts);
 export class BatteryComponent implements OnInit {
 
   constructor() { }
+  @Input() numRows;
   data: Number[];
   polltime;
   updateFlag: boolean;
@@ -29,13 +30,13 @@ export class BatteryComponent implements OnInit {
     chart: {
       type: 'solidgauge',
       width: (window.screen.width / 3),
-      height: (window.screen.height / 5) * .9,
-      backgroundColor: "#2a2a2b"
+      // backgroundColor: "#2a2a2b"
+      backgroundColor: "#272e48"
     },
 
     title: {
-      text: 'Battery Voltage',
-      style: { fontSize: "50px" }
+      text: 'Battery Charge',
+      style: { fontSize: "40px" }
     },
 
     pane: {
@@ -107,8 +108,17 @@ export class BatteryComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.gaugeOptions.chart = {
+      type: 'solidgauge',
+      width: (window.screen.width / 3),
+      height: (window.screen.height / this.numRows) * .9,
+      spacingTop: 11,
+      // backgroundColor: "#2a2a2b"
+      backgroundColor: "#272e48",
+    };
+
     this.updateFlag = false;
-    this.polltime = interval(3000);
+    this.polltime = interval(2500);
     this.subscription = this.polltime.subscribe(() => {
       this.data = [Math.floor(Math.random() * 50)];
       this.update(this.data);

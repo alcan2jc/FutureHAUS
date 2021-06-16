@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import * as cocoSSD from "@tensorflow-models/coco-ssd";
-import { timer } from 'rxjs';
 
 @Component({
   selector: 'app-ar',
@@ -10,9 +9,6 @@ import { timer } from 'rxjs';
 export class ARComponent implements OnInit {
   @ViewChild('videoElement') videoElement: ElementRef;
   video: HTMLVideoElement;
-  interval;
-  subscribeTimer: any;
-  timer: number;
   constructor() { }
 
   ngOnInit(): void {
@@ -43,30 +39,18 @@ export class ARComponent implements OnInit {
   }
 
   detectFrame = (video, model) => {
+    const t0 = performance.now();
     model.detect(video).then(predictions => {
-      this.renderPredictions(predictions);
+      this.renderPredictions(predictions, t0);
       requestAnimationFrame(() => {
         this.detectFrame(video, model);
       });
     });
   }
 
-  observableTimer() {
-    const source = timer(1000, 2000);
-    const abc = source.subscribe(val => {
-      this.subscribeTimer = val;
-    });
-  }
-
-  startTimer() {
-    this.interval = setInterval(() => {
-      this.timer++;
-    },1000)
-  }
-
-  renderPredictions = predictions => {
+  renderPredictions = (predictions, t0) => {
     const canvas = <HTMLCanvasElement>document.getElementById("canvas");
-    
+
     const ctx = canvas.getContext("2d");
     canvas.width = 750;
     canvas.height = 750;
@@ -78,9 +62,8 @@ export class ARComponent implements OnInit {
     ctx.font = font;
     ctx.textBaseline = "top";
     ctx.drawImage(this.video, 0, 0, 750, 750);
+    const t1 = performance.now();
     predictions.forEach(prediction => {
-
-      
       const x = prediction.bbox[0];
       const y = prediction.bbox[1];
       const width = prediction.bbox[2];
@@ -101,6 +84,12 @@ export class ARComponent implements OnInit {
       const y = prediction.bbox[1];
       ctx.fillStyle = "#000000";
       ctx.fillText(prediction.class, x, y);
+      console.log(prediction.class, `Took ${t1 - t0} milliseconds`);
     });
   };
+
+  ngOnDestroy() {
+    this.video = null;
+    this.videoElement.nativeElement.stop();
+  }
 }

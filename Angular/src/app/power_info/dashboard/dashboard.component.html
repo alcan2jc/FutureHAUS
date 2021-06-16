@@ -5,7 +5,7 @@
     <mat-grid-list cols="{{ ( cardLayout | async )?.columns }}" [rowHeight]="rowHeightStr" [gutterSize]="'10px'">
 
         <mat-grid-tile [colspan]="( cardLayout | async )?.battery.cols" [rowspan]="( cardLayout | async )?.battery.rows">
-          <battery-component></battery-component>
+          <battery-component [numRows]="numRows"></battery-component>
         </mat-grid-tile>
         
         <mat-grid-tile [colspan]="( cardLayout | async )?.money.cols" [rowspan]="( cardLayout | async )?.money.rows">
@@ -17,12 +17,12 @@
         </mat-grid-tile>
 
         <mat-grid-tile [colspan]="( cardLayout | async )?.power.cols" [rowspan]="( cardLayout | async )?.power.rows">
-          <power-component></power-component>
+          <power-component [numRows]="numRows"></power-component>
         </mat-grid-tile>
 
         <mat-grid-tile [colspan]="( cardLayout | async )?.weather.cols"
           [rowspan]="( cardLayout | async )?.weather.rows">
-          <weather-component></weather-component>
+          <weather-component [numRows]="numRows"></weather-component>
       </mat-grid-tile>
     </mat-grid-list>
   </div>

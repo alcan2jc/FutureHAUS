@@ -43,6 +43,6 @@ export class DashboardComponent {
     this.numRows = 5;
     this.numCols = 3;
     this.rowHeight = (window.screen.height / this.numRows) * .965;
-    this.rowHeightStr = ((window.screen.height / this.numRows) * .965).toString() + 'px';
+    this.rowHeightStr = this.rowHeight.toString() + 'px';
   }
 }

@@ -2,28 +2,47 @@
 .mat-card {
     position: absolute;
     top: 11px;
-    left: 11px;
+    // left: 11px;
     right: 11px;
     bottom: 11px;
     display: flex;
     flex-direction: column;
     border-radius: 0px;
-    background-color: #2a2a2b;
-    justify-content: top;
+    // background-color: #2a2a2b;
+    background-color: #272e48;
+    justify-content: space-between;
     align-items: center;
     width:auto;
 }
-.value-text {
+
+.title {
+    order: 0;
     text-align: center;
     color: white;
-    display: grid;
+}
+
+.value {
+    order: 1;
+    text-align: center;
+    color: white;
+}
+
+.percent {
+    order: 2;
+    color: gray;
+    text-align: center;
 }
 
 .avatar-icon {
     transform: scale(2);
     color: yellow;
     padding-bottom: 12px;
-    // display: block;
-    // margin-left: auto;
-    // margin-right: auto;
+}
+
+.red {
+    color: red;
+}
+
+.green {
+    color: green;
 }
