@@ -1,0 +1,14 @@
+.mat-card {
+    position: absolute;
+    top: 11px;
+    left: 11px;
+    right: 11px;
+    bottom: 11px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 0px;
+    // background-color: #272e48;
+    justify-content: space-between;
+    align-items: center;
+    border: solid 2px #323c3c;
+}

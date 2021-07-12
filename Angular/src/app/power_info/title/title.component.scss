@@ -11,4 +11,17 @@
     justify-content: space-between;
     align-items: center;
     border: solid 2px #323c3c;
+    // flex-wrap: wrap;
+}
+
+.logo {
+    order: 0;   
+}
+
+.title {
+    order: 1;
+    text-align: center;
+    font-size: 25px;
+    color: #fff;
+    margin-top: -500px;
 }

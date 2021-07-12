@@ -1,2 +1,0 @@
-# FutureHAUS
-FutureHAUS Web server

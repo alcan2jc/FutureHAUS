@@ -25,9 +25,6 @@ import { ChartsModule } from 'ng2-charts';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { BatteryComponent } from './power_info/battery/battery.component';
-import { PanelComponent } from './power_info/panel/panel.component';
-import { ChargecontrollerComponent } from './power_info/chargecontroller/chargecontroller.component';
-import { InverterComponent } from './power_info/inverter/inverter.component';
 import { InfoComponent } from './power_info//info.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
@@ -35,9 +32,10 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { DashboardComponent } from './power_info/dashboard/dashboard.component';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { MatListModule } from '@angular/material/list';
-import { MoneyComponent } from './power_info/money/money.component';
+import { TitleComponent } from './power_info/title/title.component';
 import { ProducedComponent } from './power_info/produced/produced.component';
 import { IMqttServiceOptions, MqttModule } from "ngx-mqtt";
+import { NetComponent } from './power_info/net/net.component';
 
 const MQTT_SERVICE_OPTIONS: IMqttServiceOptions = {
   hostname: '192.168.0.160',
@@ -54,14 +52,12 @@ const MQTT_SERVICE_OPTIONS: IMqttServiceOptions = {
     ARComponent,
     WelcomeComponent,
     BatteryComponent,
-    PanelComponent,
-    ChargecontrollerComponent,
-    InverterComponent,
     InfoComponent,
     DashboardComponent,
     WeatherComponent,
-    MoneyComponent,
+    TitleComponent,
     ProducedComponent,
+    NetComponent,
   ],
   imports: [
     BrowserModule,

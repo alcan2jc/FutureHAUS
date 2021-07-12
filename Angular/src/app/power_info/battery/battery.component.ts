@@ -3,7 +3,8 @@ import * as Highcharts from "highcharts";
 import HighchartsMore from 'highcharts/highcharts-more';
 import HighchartsSolidGauge from 'highcharts/modules/solid-gauge';
 import theme from 'highcharts/themes/dark-unica';
-import { interval, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
+import { MqttService } from 'ngx-mqtt';
 
 HighchartsMore(Highcharts);
 HighchartsSolidGauge(Highcharts);
@@ -17,9 +18,12 @@ theme(Highcharts);
 
 export class BatteryComponent implements OnInit {
 
-  constructor() { }
-  @Input() numRows;
-  data: Number[];
+  constructor(private mqtt: MqttService) { }
+  @Input() numRows: number;
+  @Input() numCols: number;
+  @Input() bgColor: string;
+  style: string;
+  voltage: Number[];
   polltime;
   updateFlag: boolean;
   subscription: Subscription;
@@ -29,14 +33,13 @@ export class BatteryComponent implements OnInit {
 
     chart: {
       type: 'solidgauge',
-      width: (window.screen.width / 3),
       // backgroundColor: "#2a2a2b"
-      backgroundColor: "#272e48"
+      backgroundColor: "#272e48",
     },
 
     title: {
       text: 'Battery Charge',
-      style: { fontSize: "40px" }
+      style: { fontSize: "30px" }
     },
 
     pane: {
@@ -82,7 +85,7 @@ export class BatteryComponent implements OnInit {
     plotOptions: {
       solidgauge: {
         dataLabels: {
-          y: 5,
+          y: 3,
           borderWidth: 0,
           useHTML: true
         }
@@ -100,41 +103,45 @@ export class BatteryComponent implements OnInit {
       dataLabels: {
         format:
           '<div style="text-align:center">' +
-          '<span style="font-size:25px">{y}</span><br/>' +
-          '<span style="font-size:12px;opacity:0.4">V</span>' +
+          '<span style="font-size:23px">{y} V</span><br/>' +
           '</div>'
       },
     }]
   }
 
   ngOnInit(): void {
+    //Subscribe to MQTT topic
+
+    this.style = "width: " + (window.screen.width / (this.numCols) * .9) + "px; background-color: " + this.bgColor;
     this.gaugeOptions.chart = {
       type: 'solidgauge',
-      width: (window.screen.width / 3),
+      marginRight: 1,
+      width: (window.screen.width / this.numCols) * .85,
       height: (window.screen.height / this.numRows) * .9,
-      spacingTop: 11,
-      // backgroundColor: "#2a2a2b"
-      backgroundColor: "#272e48",
+      // backgroundColor: "#2a2a2b",
+      backgroundColor: this.bgColor,
+      // backgroundColor: "#272e48",
     };
 
     this.updateFlag = false;
-    this.polltime = interval(2500);
-    this.subscription = this.polltime.subscribe(() => {
-      this.data = [Math.floor(Math.random() * 50)];
-      this.update(this.data);
+
+    const topic = 'FutureHAUS/Website/Battery';
+    this.subscription = this.mqtt.observe(topic).subscribe((msg) => {
+      let voltage: number[] = [+msg.payload.toString()];
+      voltage[0] = +voltage[0].toPrecision(3);
+      this.update(voltage)
     });
   }
 
-  update(val) {
+  update(voltage) {
     this.gaugeOptions.series = [{
       name: 'Voltage',
       type: undefined,
-      data: val,
+      data: voltage,
       dataLabels: {
         format:
           '<div style="text-align:center">' +
-          '<span style="font-size:25px">{y}</span><br/>' +
-          '<span style="font-size:12px;opacity:0.4">V</span>' +
+          '<span style="font-size:20px">{y} V</span><br/>' +
           '</div>'
       },
     }]
@@ -142,6 +149,8 @@ export class BatteryComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 }

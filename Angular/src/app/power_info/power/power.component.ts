@@ -1,7 +1,15 @@
 import { Component, Input, OnInit } from '@angular/core';
 import * as Highcharts from "highcharts";
 import theme from 'highcharts/themes/dark-unica';
+import { PowerService } from '../../_services/power.service';
+import { Subscription } from 'rxjs';
 theme(Highcharts);
+
+interface PowerData {
+    prod: [number, number],
+    cons: [number, number],
+    net: [number, number]
+}
 
 @Component({
     selector: 'power-component',
@@ -10,23 +18,28 @@ theme(Highcharts);
 })
 export class PowerComponent implements OnInit {
     @Input() numRows;
-    updateFlag: boolean
+    @Input() bgColor;
+    style: string;
+    updateFlag: boolean;
     consumption: number[];
+    subscription: Subscription;
     production: number[];
-    net: number[];
-    polltime;
-    constructor() { }
-    Highcharts: typeof Highcharts = Highcharts;
-    chartRef: Highcharts.Chart;
 
-    chartCallback: Highcharts.ChartCallbackFunction = (chart) => {
-        this.chartRef = chart;
-    };
+    data: PowerData;
+
+    polltime;
+    interval;
+    constructor(private power_service: PowerService) {
+        this.subscription = this.power_service.powerData.subscribe((data: PowerData) => {
+            this.data = data;
+        });
+    }
+    Highcharts: typeof Highcharts = Highcharts;
+
     chartOptions: Highcharts.Options = {
         chart: {
             type: 'area',
             width: window.screen.width,
-            backgroundColor: "#272e48",
         },
         title: {
             text: "Loading..."
@@ -34,31 +47,28 @@ export class PowerComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.style = "width: " + window.screen.width * .965 + "px; background-color: " + this.bgColor;
         this.updateFlag = false;
         this.production = [];
         this.consumption = [];
-        this.net = [];
+        var power = this;
 
         this.chartOptions = {
             chart: {
                 type: 'area',
-                width: window.screen.width,
-                height: (window.screen.height) * (2 / this.numRows),
-                backgroundColor: "#272e48",
+                width: window.screen.width * .96,
+                height: (window.screen.height * 2) / (this.numRows) * .88,
+                backgroundColor: this.bgColor,
                 events: {
                     load: function () {
                         // set up the updating of the chart each second
                         var chart = this;
                         var production = this.series[0];
                         var consumption = this.series[1];
-                        var net = this.series[2];
-                        setInterval(function () {
-                            var x = (new Date()).getTime(), // current time
-                                prody = Math.random() * 20,
-                                consy = -Math.random() * 20;
-                            production.addPoint([x, prody], false, true);
-                            consumption.addPoint([x, consy], false, true);
-                            net.addPoint([x, prody + consy], false, true);
+                        power.interval = setInterval(function () {
+                            power.power_service.getPower();
+                            production.addPoint(power.data.prod, false, true);
+                            consumption.addPoint(power.data.cons, false, true);
                             chart.redraw();
                         }, 2000);
                     }
@@ -76,28 +86,16 @@ export class PowerComponent implements OnInit {
                 }
             },
 
-            accessibility: {
-                announceNewData: {
-                    enabled: true,
-                    minAnnounceInterval: 15000,
-                    announcementFormatter: function (allSeries, newSeries, newPoint) {
-                        if (newPoint) {
-                            return 'New point added. Value: ' + newPoint.y;
-                        }
-                        return false;
-                    }
-                }
-            },
-
             xAxis: {
-                // categories: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
                 type: 'datetime',
                 tickPixelInterval: 150,
                 labels: {
                     style: {
                         fontSize: "150%"
                     },
-                }
+                    
+                },
+                
             },
             yAxis: {
                 title: {
@@ -135,7 +133,7 @@ export class PowerComponent implements OnInit {
             series: [{
                 name: "Production",
                 type: 'area',
-                data: Array.from({length: 5}, () => {
+                data: Array.from({ length: 5 }, () => {
                     return [(new Date).getTime(), 0]
                 }),
                 color: { // green/yellow
@@ -151,7 +149,7 @@ export class PowerComponent implements OnInit {
             }, {
                 name: "Consumption",
                 type: 'area',
-                data: Array.from({length: 5}, () => {
+                data: Array.from({ length: 5 }, () => {
                     return [(new Date).getTime(), 0]
                 }),
                 color: {
@@ -165,19 +163,13 @@ export class PowerComponent implements OnInit {
                 marker: {
                     enabled: false
                 }
-            }, {
-                name: "Net",    
-                type: "line",
-                color: "#000080",
-                data: Array.from({length: 5}, () => {
-                    return [(new Date).getTime(), 0]
-                }),
             }]
         };
         this.updateFlag = true;
     }
 
-    // ngOnDestroy() {
-    //     this.subscription.unsubscribe();
-    // }
+    ngOnDestroy() {
+        clearInterval(this.interval);
+        this.subscription.unsubscribe();
+    }
 }

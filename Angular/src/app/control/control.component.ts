@@ -18,23 +18,28 @@ export class ControlComponent implements OnInit {
 
   ngOnInit(): void {
     // this.publish("message from website");
+    // this.subscription = this.mqtt.observe("dev").subscribe( (msg) => {
+    //   console.log(msg.payload.toString());
+    // });
   }
 
   subscribe(topic: string) {
     console.log("subscribed to " + topic);
-    this.subscription = this.mqtt.observe(topic).subscribe( (msg) => {
+    this.subscription = this.mqtt.observe(topic).subscribe((msg) => {
       console.log(msg.payload.toString());
     });
   }
 
   publish(msg: string) {
-    let topic = 'dev/test';
+    let topic = 'dev/server';
     console.log("publishing");
     this.mqtt.unsafePublish(topic, msg, { qos: 1, retain: true });
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
   img1: string = "https://www.futurehaus.tech/assets/images/rooms/bath-206.jpg";

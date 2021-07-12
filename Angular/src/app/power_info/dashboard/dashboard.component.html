@@ -1,29 +1,30 @@
 <!--dash.component.html-->
-<div class="darkMode">
-  <div #content class="grid-container">
-    <!-- <h1 class="mat-h1" style="color: white">Dashboard</h1> -->
-    <mat-grid-list cols="{{ ( cardLayout | async )?.columns }}" [rowHeight]="rowHeightStr" [gutterSize]="'10px'">
+<div class="grid-container">
+  <!-- <h1 class="mat-h1" style="color: white">Dashboard</h1> -->
+  <mat-grid-list cols="{{ ( cardLayout | async )?.columns }}" [rowHeight]="rowHeightStr" [gutterSize]="'10px'">
 
-        <mat-grid-tile [colspan]="( cardLayout | async )?.battery.cols" [rowspan]="( cardLayout | async )?.battery.rows">
-          <battery-component [numRows]="numRows"></battery-component>
-        </mat-grid-tile>
-        
-        <mat-grid-tile [colspan]="( cardLayout | async )?.money.cols" [rowspan]="( cardLayout | async )?.money.rows">
-            <money-component [numRows]="numRows"></money-component>
-        </mat-grid-tile>
+    <mat-grid-tile [colspan]="( cardLayout | async )?.battery.cols" [rowspan]="( cardLayout | async )?.battery.rows">
+      <battery-component [numRows]="numRows" [numCols]="numCols" [bgColor]="bgColor"></battery-component>
+    </mat-grid-tile>
 
-        <mat-grid-tile  [colspan]="( cardLayout | async )?.temp.cols" [rowspan]="( cardLayout | async )?.temp.rows">
-          <produced-component [numRows]="numRows"></produced-component>
-        </mat-grid-tile>
+    <mat-grid-tile [colspan]="( cardLayout | async )?.title.cols" [rowspan]="( cardLayout | async )?.title.rows">
+      <title-component [numRows]="numRows" [numCols]="numCols" [bgColor]="bgColor"></title-component>
+    </mat-grid-tile>
 
-        <mat-grid-tile [colspan]="( cardLayout | async )?.power.cols" [rowspan]="( cardLayout | async )?.power.rows">
-          <power-component [numRows]="numRows"></power-component>
-        </mat-grid-tile>
+    <mat-grid-tile [colspan]="( cardLayout | async )?.produced.cols" [rowspan]="( cardLayout | async )?.produced.rows">
+      <produced-component [numRows]="numRows" [numCols]="numCols" [bgColor]="bgColor"></produced-component>
+    </mat-grid-tile>
 
-        <mat-grid-tile [colspan]="( cardLayout | async )?.weather.cols"
-          [rowspan]="( cardLayout | async )?.weather.rows">
-          <weather-component [numRows]="numRows"></weather-component>
-      </mat-grid-tile>
-    </mat-grid-list>
-  </div>
+    <mat-grid-tile [colspan]="( cardLayout | async )?.power.cols" [rowspan]="( cardLayout | async )?.power.rows">
+      <power-component [numRows]="numRows" [bgColor]="bgColor"></power-component>
+    </mat-grid-tile>
+    
+    <mat-grid-tile [colspan]="( cardLayout | async )?.net.cols" [rowspan]="( cardLayout | async )?.net.rows">
+      <net-component [numRows]="numRows" [bgColor]="bgColor"></net-component>
+    </mat-grid-tile>
+
+    <mat-grid-tile [colspan]="( cardLayout | async )?.weather.cols" [rowspan]="( cardLayout | async )?.weather.rows">
+      <weather-component [numRows]="numRows" [bgColor]="bgColor"></weather-component>
+    </mat-grid-tile>
+  </mat-grid-list>
 </div>

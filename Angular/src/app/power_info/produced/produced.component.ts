@@ -9,16 +9,17 @@ import { interval, Subscription } from 'rxjs';
 export class ProducedComponent implements OnInit {
 
   constructor() { }
-
+  @Input() numRows: number;
+  @Input() numCols: number;
+  @Input() bgColor: string;
   electricity: number;
   lastWeekElectricity: number;
-  @Input() numRows: number;
   style: string;
   subscription: Subscription;
   polltime;
 
   ngOnInit(): void {
-    this.style = "width: " + (window.screen.width / 3) + "px;";
+    this.style = "width: " + ((window.screen.width / this.numCols) *.9) + "px; background-color: " + this.bgColor;
     this.polltime = interval(3500);
     this.electricity = Math.floor(Math.random() * 50);
     this.lastWeekElectricity = 70;

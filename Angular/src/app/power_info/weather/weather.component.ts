@@ -1,10 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import * as Highcharts from "highcharts";
 import theme from 'highcharts/themes/dark-unica';
-// import { WeatherService } from "../../_services/weather.service";
 import { parse } from 'node-html-parser';
 import { interval, Subscription } from 'rxjs';
-// import * as puppeteer from 'puppeteer';
 theme(Highcharts);
 
 interface Data {
@@ -20,7 +18,6 @@ interface PlottablePoint extends Highcharts.Point {
   plotY: number;
 }
 
-
 @Component({
   selector: 'weather-component',
   templateUrl: './weather.component.html',
@@ -28,13 +25,15 @@ interface PlottablePoint extends Highcharts.Point {
 })
 export class WeatherComponent implements OnInit {
 
+  @Input() numRows: number;
+  @Input() bgColor: string;
+  style: string;
   times: string[];
   temps: number[];
   days: string[];
   symbols: string[];
   location: string;
   updateFlag;
-  @Input() numRows;
   subscription: Subscription;
   polltime;
 
@@ -70,8 +69,13 @@ export class WeatherComponent implements OnInit {
 
     yAxis: {
       title: {
-        text: 'Temperature (F)'
+        text: 'Temperature (F)',
+        style: {
+          fontSize: "150%",
+          color: "white"
+        }
       },
+
       labels: {
         formatter: function () {
           return (Number(this.value)).toString() + "°";
@@ -111,37 +115,41 @@ export class WeatherComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.style = "width: " + window.screen.width * .965 + "px; background-color: " + this.bgColor;
     this.polltime = interval(15 * 60 * 1000);
-    // this.polltime = interval(3000);
+    let weather = this;
+    // this.polltime = interval(1000);
     this.update();
     this.subscription = this.polltime.subscribe(() => {
       this.update();
     });
 
-    let weather = this;
     //Weather symbols from https://cdn.jsdelivr.net/gh/YR/weather-symbols@6.0.2/dist/svg/
     this.chartOptions.chart = {
       plotBorderWidth: 1,
-      width: (window.screen.width),
-      height: (window.screen.height) * (2 / this.numRows) * .9,
-      backgroundColor: "#272e48",
+      width: (window.screen.width) * .96,
+      height: (window.screen.height * 2) / (this.numRows) * .88,
+      // backgroundColor: "#272e48",
+      backgroundColor: this.bgColor,
       alignTicks: true,
       events: {
         render() {
-          this.series[0].data.forEach((p: PlottablePoint, i) => {
-            if (weather.symbols[i] !== "" && p.category !== "") {
-              var image = this.renderer.image('../../../assets/WeatherSymbols/' + weather.symbols[i] + '.svg',
-                p.plotX + this.plotLeft - 20, p.plotY + this.plotTop - 30, 30, 30)
-                .attr({
-                  zIndex: 5
-                })
-                .add();
+          if (this.series[0].data.length != 1) {
+            this.series[0].data.forEach((p: PlottablePoint, i) => {
+              if (weather.symbols[i] !== "" && p.category !== "") {
+                var image = this.renderer.image('../../../assets/WeatherSymbols/' + weather.symbols[i] + '.svg',
+                  p.plotX + this.plotLeft - 20, p.plotY + this.plotTop - 30, 30, 30)
+                  .attr({
+                    zIndex: 5
+                  })
+                  .add();
 
-              setTimeout(function () {
-                image.destroy();
-              }, 15 * 60 * 60 * 60);
-            }
-          })
+                setTimeout(function () {
+                  image.destroy();
+                }, 1000 * 60 * 15);
+              }
+            })
+          }
         }
       }
     }
@@ -159,6 +167,12 @@ export class WeatherComponent implements OnInit {
       this.days = data.days;
       this.symbols = data.symbols;
       this.location = data.location;
+
+      for (let i = 0; i < this.times.length; i++) {
+        if (i % 2 == 1) {
+          this.times[i] = "";
+        }
+      }
 
       this.chartOptions.title = {
         text: 'Weather for ' + this.location,
