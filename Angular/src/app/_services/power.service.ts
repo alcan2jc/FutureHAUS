@@ -41,10 +41,6 @@ export class PowerService {
     data.net = [x, prody + consy];
     this.powerDataService.next(data);
   }
-
-  getBatteryVoltage() {
-
-  }
   
   ngOnDestroy() {
     if (this.subscription) {

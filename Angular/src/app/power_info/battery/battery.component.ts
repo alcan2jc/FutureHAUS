@@ -10,6 +10,13 @@ HighchartsMore(Highcharts);
 HighchartsSolidGauge(Highcharts);
 theme(Highcharts);
 
+interface SchneiderData {
+  dc_voltage: number[],
+  pv_power: string,
+  pv_current: string,
+  pv_voltage: string
+}
+
 @Component({
   selector: 'battery-component',
   templateUrl: './battery.component.html',
@@ -127,9 +134,16 @@ export class BatteryComponent implements OnInit {
 
     const topic = 'FutureHAUS/Website/Battery';
     this.subscription = this.mqtt.observe(topic).subscribe((msg) => {
-      let voltage: number[] = [+msg.payload.toString()];
-      voltage[0] = +voltage[0].toPrecision(3);
-      this.update(voltage)
+      let data: SchneiderData = {
+        dc_voltage: null,
+        pv_power: null,
+        pv_current: null,
+        pv_voltage: null
+      }
+      let datamsg = JSON.parse(msg.payload.toString());
+      data.dc_voltage = [+datamsg.DC_Output_Voltage];
+      data.dc_voltage[0] = +data.dc_voltage[0].toPrecision(3);
+      this.update(data.dc_voltage);
     });
   }
 
