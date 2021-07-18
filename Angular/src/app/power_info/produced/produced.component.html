@@ -4,12 +4,12 @@
         <span>Produced</span>
     </h3>
     <h3 class="value">{{electricity | number: '1.2-2'}} KWh</h3>
-    <div class="percent">
+    <!-- <div class="percent">
         <span [ngStyle]="{'color': electricity > lastWeekElectricity ? 'green' : 'red' }">
             {{(((electricity - lastWeekElectricity) / electricity)) | percent: '2.1-2'}}
             <mat-icon *ngIf="electricity > lastWeekElectricity">arrow_upward</mat-icon>
             <mat-icon *ngIf="electricity < lastWeekElectricity">arrow_downward</mat-icon>
         </span>
         <span style="color: gray;"> Since Last Week</span>
-    </div>
+    </div> -->
 </mat-card>

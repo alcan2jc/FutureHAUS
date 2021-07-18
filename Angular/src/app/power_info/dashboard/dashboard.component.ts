@@ -45,6 +45,7 @@ export class DashboardComponent {
     this.numRows = 7;
     this.numCols = 4;
     this.bgColor = "#0d1111"
-    this.rowHeightStr = (window.screen.height / this.numRows) * .965 + 'px';
+    // this.rowHeightStr = (window.screen.height / this.numRows) * .965 + 'px';
+    this.rowHeightStr = (95.5 / this.numRows).toString() + 'vh';
   }
 }

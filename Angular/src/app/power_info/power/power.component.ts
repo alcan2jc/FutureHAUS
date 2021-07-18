@@ -47,7 +47,8 @@ export class PowerComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.style = "width: " + window.screen.width * .965 + "px; background-color: " + this.bgColor;
+        // this.style = "width: " + window.screen.width * .965 + "px; background-color: " + this.bgColor;
+        this.style = "width: 94vw; background-color: " + this.bgColor;
         this.updateFlag = false;
         this.production = [];
         this.consumption = [];
@@ -56,7 +57,8 @@ export class PowerComponent implements OnInit {
         this.chartOptions = {
             chart: {
                 type: 'area',
-                width: window.screen.width * .96,
+                // width: window.screen.width * .96,
+                width: window.screen.width * .9,
                 height: (window.screen.height * 2) / (this.numRows) * .88,
                 backgroundColor: this.bgColor,
                 events: {

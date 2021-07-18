@@ -19,7 +19,8 @@ export class ProducedComponent implements OnInit {
   polltime;
 
   ngOnInit(): void {
-    this.style = "width: " + ((window.screen.width / this.numCols) *.9) + "px; background-color: " + this.bgColor;
+    // this.style = "width: " + ((window.screen.width / this.numCols) *.9) + "px; background-color: " + this.bgColor;
+    this.style = "width: " + (80 / this.numCols).toString() + "vw; background-color: " + this.bgColor;
     this.polltime = interval(3500);
     this.electricity = Math.floor(Math.random() * 50);
     this.lastWeekElectricity = 70;

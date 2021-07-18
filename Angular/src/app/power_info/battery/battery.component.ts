@@ -92,7 +92,7 @@ export class BatteryComponent implements OnInit {
     plotOptions: {
       solidgauge: {
         dataLabels: {
-          y: 3,
+          y: -2,
           borderWidth: 0,
           useHTML: true
         }
@@ -140,9 +140,11 @@ export class BatteryComponent implements OnInit {
         pv_current: null,
         pv_voltage: null
       }
+      console.log(msg.payload.toString());
       let datamsg = JSON.parse(msg.payload.toString());
-      data.dc_voltage = [+datamsg.DC_Output_Voltage];
+      data.dc_voltage = [+datamsg.DC_Output_Voltage.slice(0, -2)];
       data.dc_voltage[0] = +data.dc_voltage[0].toPrecision(3);
+      console.log(data.dc_voltage);
       this.update(data.dc_voltage);
     });
   }

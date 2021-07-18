@@ -20,7 +20,7 @@ export class PowerService {
     this.powerData = this.powerDataService.asObservable();
 
     //Subscribe to MQTT topic
-    let topic = "FutureHAUS/Website/Info";
+    let topic = "FutureHAUS/Website/Consumption";
     this.subscription = this.mqtt.observe(topic).subscribe((msg) => {
       this.results = JSON.parse(msg.payload.toString());
     });
@@ -28,8 +28,8 @@ export class PowerService {
 
   getPower() {
     let x = (new Date()).getTime();
-    let prody = this.results.ct0.power;
-    let consy = -this.results.ct1.power;
+    let prody = Math.random() * 30; + 22;
+    let consy = this.results.ct0_power + this.results.ct1_power;
 
     let data: PowerData = {
       prod: [0, 0],

@@ -115,7 +115,8 @@ export class WeatherComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.style = "width: " + window.screen.width * .965 + "px; background-color: " + this.bgColor;
+    // this.style = "width: " + window.screen.width * .965 + "px; background-color: " + this.bgColor;
+    this.style = "width: 94vw; background-color: " + this.bgColor;
     this.polltime = interval(15 * 60 * 1000);
     let weather = this;
     // this.polltime = interval(1000);
@@ -127,7 +128,7 @@ export class WeatherComponent implements OnInit {
     //Weather symbols from https://cdn.jsdelivr.net/gh/YR/weather-symbols@6.0.2/dist/svg/
     this.chartOptions.chart = {
       plotBorderWidth: 1,
-      width: (window.screen.width) * .96,
+      width: (window.screen.width) * .93,
       height: (window.screen.height * 2) / (this.numRows) * .88,
       // backgroundColor: "#272e48",
       backgroundColor: this.bgColor,

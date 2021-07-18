@@ -43,14 +43,15 @@ export class NetComponent implements OnInit {
     }
   }
   ngOnInit(): void {
-    this.style = "width: " + window.screen.width * .965 + "px; background-color: " + this.bgColor;
+    // this.style = "width: " + window.screen.width * .965 + "px; background-color: " + this.bgColor;
+    this.style = "width: 94vw; background-color: " + this.bgColor;
     this.net = [];
     this.updateFlag = false;
     var power = this;
     this.chartOptions = {
       chart: {
         type: 'area',
-        width: window.screen.width * .96,
+        width: window.screen.width * .9,
         height: (window.screen.height * 2) / (this.numRows) * .88,
         backgroundColor: this.bgColor,
         events: {
