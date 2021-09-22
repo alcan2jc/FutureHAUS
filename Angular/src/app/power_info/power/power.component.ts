@@ -29,8 +29,8 @@ export class PowerComponent implements OnInit {
 
     polltime;
     interval;
-    constructor(private power_service: PowerService) {
-        this.subscription = this.power_service.powerData.subscribe((data: PowerData) => {
+    constructor(private powerService: PowerService) {
+        this.subscription = this.powerService.powerData.subscribe((data: PowerData) => {
             this.data = data;
         });
     }
@@ -68,7 +68,7 @@ export class PowerComponent implements OnInit {
                         var production = this.series[0];
                         var consumption = this.series[1];
                         power.interval = setInterval(function () {
-                            power.power_service.getPower();
+                            power.powerService.getPower();
                             production.addPoint(power.data.prod, false, true);
                             consumption.addPoint(power.data.cons, false, true);
                             chart.redraw();

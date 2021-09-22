@@ -3,8 +3,8 @@ import * as Highcharts from "highcharts";
 import HighchartsMore from 'highcharts/highcharts-more';
 import HighchartsSolidGauge from 'highcharts/modules/solid-gauge';
 import theme from 'highcharts/themes/dark-unica';
-import { Subscription } from 'rxjs';
-import { MqttService } from 'ngx-mqtt';
+import { interval, Subscription } from 'rxjs';
+import { SchneiderService } from '../../_services/schneider.service';
 
 HighchartsMore(Highcharts);
 HighchartsSolidGauge(Highcharts);
@@ -12,7 +12,7 @@ theme(Highcharts);
 
 interface SchneiderData {
   dc_voltage: number[],
-  pv_power: string,
+  pv_power: number,
   pv_current: string,
   pv_voltage: string
 }
@@ -25,7 +25,6 @@ interface SchneiderData {
 
 export class BatteryComponent implements OnInit {
 
-  constructor(private mqtt: MqttService) { }
   @Input() numRows: number;
   @Input() numCols: number;
   @Input() bgColor: string;
@@ -34,7 +33,14 @@ export class BatteryComponent implements OnInit {
   polltime;
   updateFlag: boolean;
   subscription: Subscription;
+  data: SchneiderData;
   Highcharts: typeof Highcharts = Highcharts;
+
+  constructor(private schneiderService: SchneiderService) {
+    this.subscription = this.schneiderService.schneiderData.subscribe((data: SchneiderData) => {
+      this.data = data;
+    });
+  }
 
   gaugeOptions: Highcharts.Options = {
 
@@ -119,37 +125,26 @@ export class BatteryComponent implements OnInit {
   ngOnInit(): void {
     //Subscribe to MQTT topic
 
-    this.style = "width: " + (window.screen.width / (this.numCols) * .9) + "px; background-color: " + this.bgColor;
+    this.style = "width: " + (80 / this.numCols).toString() + "vw; background-color: " + this.bgColor;
     this.gaugeOptions.chart = {
       type: 'solidgauge',
       marginRight: 1,
-      width: (window.screen.width / this.numCols) * .85,
+      width: (window.screen.width / this.numCols) * .78,
       height: (window.screen.height / this.numRows) * .9,
       // backgroundColor: "#2a2a2b",
       backgroundColor: this.bgColor,
       // backgroundColor: "#272e48",
     };
+    this.polltime = interval(2000);
 
-    this.updateFlag = false;
-
-    const topic = 'FutureHAUS/Website/Battery';
-    this.subscription = this.mqtt.observe(topic).subscribe((msg) => {
-      let data: SchneiderData = {
-        dc_voltage: null,
-        pv_power: null,
-        pv_current: null,
-        pv_voltage: null
-      }
-      console.log(msg.payload.toString());
-      let datamsg = JSON.parse(msg.payload.toString());
-      data.dc_voltage = [+datamsg.DC_Output_Voltage.slice(0, -2)];
-      data.dc_voltage[0] = +data.dc_voltage[0].toPrecision(3);
-      console.log(data.dc_voltage);
-      this.update(data.dc_voltage);
+    this.subscription = this.polltime.subscribe(() => {
+      this.schneiderService.getScraped();
+      this.update(this.data.dc_voltage);
     });
   }
 
   update(voltage) {
+    this.updateFlag = false;
     this.gaugeOptions.series = [{
       name: 'Voltage',
       type: undefined,

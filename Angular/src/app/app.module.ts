@@ -36,6 +36,10 @@ import { TitleComponent } from './power_info/title/title.component';
 import { ProducedComponent } from './power_info/produced/produced.component';
 import { IMqttServiceOptions, MqttModule } from "ngx-mqtt";
 import { NetComponent } from './power_info/net/net.component';
+import { InverterARComponent } from './ar/inverter-ar/inverter-ar.component';
+import { BatteryArComponent } from './ar/battery-ar/battery-ar.component';
+import { ChargeArComponent } from './ar/charge/charge-ar/charge-ar.component';
+import { PvArComponent } from './ar/pv/pv-ar/pv-ar.component';
 
 const MQTT_SERVICE_OPTIONS: IMqttServiceOptions = {
   hostname: '192.168.0.160',
@@ -58,6 +62,10 @@ const MQTT_SERVICE_OPTIONS: IMqttServiceOptions = {
     TitleComponent,
     ProducedComponent,
     NetComponent,
+    InverterARComponent,
+    BatteryArComponent,
+    ChargeArComponent,
+    PvArComponent,
   ],
   imports: [
     BrowserModule,

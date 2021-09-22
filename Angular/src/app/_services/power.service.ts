@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { MqttService } from 'ngx-mqtt';
+import { SchneiderService } from './schneider.service';
 
 interface PowerData {
   prod: [number, number],
@@ -8,28 +9,41 @@ interface PowerData {
   net: [number, number]
 }
 
+interface SchneiderData {
+  dc_voltage: number[],
+  pv_power: number,
+  pv_current: string,
+  pv_voltage: string
+}
+
 @Injectable({ providedIn: 'root' })
 export class PowerService {
 
   private powerDataService: BehaviorSubject<PowerData>;
   public powerData: Observable<PowerData>;
-  subscription: Subscription;
-  results: any;
-  constructor(private mqtt: MqttService) {
+
+  subscriptionCons: Subscription;
+  subscriptionProd: Subscription;
+  consumptionJSON: any;
+  scraped: any;
+  constructor(private mqtt: MqttService, private schneiderService: SchneiderService) {
     this.powerDataService = new BehaviorSubject(null);
     this.powerData = this.powerDataService.asObservable();
 
     //Subscribe to MQTT topic
-    let topic = "FutureHAUS/Website/Consumption";
-    this.subscription = this.mqtt.observe(topic).subscribe((msg) => {
-      this.results = JSON.parse(msg.payload.toString());
+    this.subscriptionCons = this.mqtt.observe("FutureHAUS/Website/Consumption").subscribe((msg) => {
+      this.consumptionJSON = JSON.parse(msg.payload.toString());
+    });
+
+    this.subscriptionProd = this.schneiderService.schneiderData.subscribe((data: SchneiderData) => {
+      this.scraped = data;
     });
   }
 
   getPower() {
-    let x = (new Date()).getTime();
-    let prody = Math.random() * 30; + 22;
-    let consy = this.results.ct0_power + this.results.ct1_power;
+    let x = (new Date().getTime());
+    let prody = this.scraped.pv_power;
+    let consy = this.consumptionJSON.ct0_power + this.consumptionJSON.ct1_power;
 
     let data: PowerData = {
       prod: [0, 0],
@@ -41,10 +55,14 @@ export class PowerService {
     data.net = [x, prody + consy];
     this.powerDataService.next(data);
   }
-  
+
   ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
+    if (this.subscriptionCons) {
+      this.subscriptionCons.unsubscribe();
+    }
+
+    if (this.subscriptionProd) {
+      this.subscriptionProd.unsubscribe();
     }
   }
 }

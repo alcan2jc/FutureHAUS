@@ -3,7 +3,18 @@
         <div class="text-center">
             <h3>
                 <video hidden #videoElement></video>
-                <canvas #canvas></canvas>
+                <div class="Row">
+                    <div class="Column">
+                        <canvas #canvas></canvas>
+                    </div>
+                    <div class="Column">
+                        <inverterAR-component *ngIf="which === 'Inverter'"></inverterAR-component>
+                        <batteryAR-component *ngIf="which === 'Battery'"></batteryAR-component>
+                    </div>
+                </div>
+
+                <!-- <batteryAR-component *ngIf="which === 'Battery'"></batteryAR-component> -->
+                <!-- <batteryAR-component *ngIf="which === 'Battery'"></batteryAR-component> -->
             </h3>
         </div>
     </div>
