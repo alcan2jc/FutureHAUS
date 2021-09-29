@@ -1,0 +1,60 @@
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 40%;
+}
+.img {
+    width: 400px; 
+    height: 400px;
+}
+
+.imgtext {
+    text-align: center;
+    font-size: 50;
+}
+
+.text {
+    grid-area: text;
+    text-align: center;
+    font-size: 50;
+}
+
+.mat-grid-tile {
+    border: solid 2px #000;
+}
+
+.close {
+    grid-area: close;
+}
+
+.status {
+    grid-area: status
+}
+
+.producing {
+    grid-area: producing
+}
+
+.three {
+    grid-area: three
+}
+
+.four {
+    grid-area: four
+}
+.five {
+    grid-area: five
+}
+
+.six {
+    grid-area: six
+}
+.grid-container {
+    /* margin: 10px; */
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: 25% 25% 25% 25%;
+    grid-template-areas:
+    ". . status producing"
+}

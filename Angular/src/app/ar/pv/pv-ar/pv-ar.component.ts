@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'pvAR-component',
   templateUrl: './pv-ar.component.html',
-  styleUrls: ['./pv-ar.component.css']
+  styleUrls: ['./pv-ar.component.scss']
 })
 export class PvArComponent implements OnInit {
   style: string;
@@ -11,7 +11,7 @@ export class PvArComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this.style = "width: 50vw; height: 50vh; margin: 10px; border: 1px solid #555";
+    this.style = "width: 49vw; height: 45vh; border: 1px solid #555";
     this.voltage = Math.round(Math.random() * 20);
   }
 }

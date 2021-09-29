@@ -1,1 +1,25 @@
-<p>pv-ar works!</p>
+<mat-drawer-container [style]=style>
+    <mat-drawer mode="side" opened>
+        <div class="imgtext">
+            <b>LG360Q1C-A5 Solar Panels</b>
+        </div>
+        <img class="img" src="../../assets/panel.png" width="250" height="300">
+    </mat-drawer>
+    <mat-drawer-content>
+        <div class="text">
+            <b>Attributes</b>
+        </div>
+
+        <div>
+            <b>Status: Connected</b>
+        </div>
+
+        <div>
+            <b>Module efficiency: 20.8%</b>
+        </div>
+
+        <div>
+            <b>Solar Panel Voltage: {{voltage}} V</b>
+        </div>
+    </mat-drawer-content>
+</mat-drawer-container>

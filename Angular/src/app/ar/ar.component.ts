@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-// import * as tf from "@tensorflow/tfjs";
+import * as tf from "@tensorflow/tfjs";
 import * as cocoSSD from '@tensorflow-models/coco-ssd';
 
 @Component({
@@ -9,43 +9,48 @@ import * as cocoSSD from '@tensorflow-models/coco-ssd';
 })
 export class ARComponent implements OnInit {
 
-  @ViewChild('videoElement') videoElement: ElementRef;
+  @ViewChild('videoElement', { static: true }) videoElement: ElementRef;
   @ViewChild('canvas') canvas: ElementRef;
   video: HTMLVideoElement;
   reqID;
   which: string;
+  model: tf.GraphModel;
   constructor() { }
 
   ngOnInit(): void {
     this.which = "";
     this.initCamera({ video: true, audio: false });
     this.predictWithCocoModel();
+    // this.predict();
   }
 
   initCamera(config: any) {
-    var browser = <any>navigator;
 
-    this.video = <HTMLVideoElement>document.getElementById("videoElement");
-    browser.getUserMedia = (browser.getUserMedia ||
-      browser.webkitGetUserMedia ||
-      browser.mozGetUserMedia ||
-      browser.msGetUserMedia);
-
-    browser.mediaDevices.getUserMedia(config).then(stream => {
+    navigator.mediaDevices.getUserMedia(config).then(stream => {
       this.videoElement.nativeElement.srcObject = stream;
+      console.log(stream);
       this.videoElement.nativeElement.onloadedmetadata = () => {
         this.videoElement.nativeElement.play();
         this.video = this.videoElement.nativeElement;
+        console.log(this.video);
       };
-    });
+    },
+      err => console.log("err:", err));
   }
+
+  // public async predict()  {
+  //   this.model = await tf.loadGraphModel('../assets/Model/web_model/model.json');
+  //   // const result = await this.model.executeAsync(tf.zeros([1, 300, 300, 3])) as any;
+  //   console.log(this.model);
+  // }
 
   //Coco code here
   public async predictWithCocoModel() {
     const model = await cocoSSD.load();
-    setTimeout(() => {
-      this.detectFrame(this.video, model);
-    }, 2000);
+    // setTimeout(() => {
+    //   this.detectFrame(this.video, model);
+    // }, 3000);
+    // this.detectFrame(this.video, model);
   }
 
   detectFrame = (video, model) => {
@@ -94,7 +99,7 @@ export class ARComponent implements OnInit {
       const y = prediction.bbox[1];
       ctx.fillStyle = "#000000";
       ctx.fillText(prediction.class, x, y);
-        
+
       if (prediction.class === "keyboard") {
         this.which = "Inverter";
       } else if (prediction.class === "mouse") {
@@ -109,7 +114,7 @@ export class ARComponent implements OnInit {
 
   ngOnDestroy() {
     cancelAnimationFrame(this.reqID);
-    // this.video.srcObject.getTracks().forEach(function (track) {
+    // this.video.getVideoTracks().forEach(function (track) {
     //   track.stop();
     // });
   }

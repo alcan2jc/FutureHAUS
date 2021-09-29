@@ -1,15 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-charge-ar',
+  selector: 'chargeAR-component',
   templateUrl: './charge-ar.component.html',
-  styleUrls: ['./charge-ar.component.css']
+  styleUrls: ['./charge-ar.component.scss']
 })
 export class ChargeArComponent implements OnInit {
-
+  style: string;
+  voltage: number;
   constructor() { }
 
   ngOnInit(): void {
+    this.style = "width: 49vw; height: 45vh; margin: 5px; border: 1px solid #555";
+    this.voltage = Math.round(Math.random() * 20);
   }
 
 }

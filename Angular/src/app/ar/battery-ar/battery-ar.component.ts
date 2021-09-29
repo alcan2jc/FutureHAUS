@@ -8,11 +8,11 @@ import { Component, OnInit } from '@angular/core';
 export class BatteryArComponent implements OnInit {
   style: string;
   voltage: number;
+
   constructor() { }
 
   ngOnInit(): void {
-    this.style = "width: 50vw; height: 50vh; margin: 5px; border: 1px solid #555";
+    this.style = "width: 48vw; height: 40vh; border: 1px solid #555";
     this.voltage = Math.round(Math.random() * 20);
   }
-
 }

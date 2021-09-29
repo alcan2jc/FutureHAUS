@@ -1,9 +1,9 @@
 <mat-drawer-container [style]=style>
     <mat-drawer mode="side" opened>
         <div class="imgtext">
-            <b>Inverter</b>
+            <b>Outback Inverter</b>
         </div>
-        <img class="img" src="../../assets/inverter.png">
+        <img class="img" src="../../assets/inverter.png" width="250" height="300">
     </mat-drawer>
     <mat-drawer-content>
         <div>
@@ -11,23 +11,19 @@
         </div>
 
         <div>
-            <b>STATUS: ON</b>
+            <b>Status: On</b>
         </div>
 
         <div>
-            <b>PRODUCING: {{produced}} kW</b>
+            <b>Sell Current: 2.5A</b>
         </div>
 
         <div>
-            <b>INVERTER BUY: 0 kW</b>
+            <b>Power Given to Grid: {{produced}} kW</b>
         </div>
 
         <div>
-            <b>PV OUTPUT: 90 W</b>
-        </div>
-
-        <div>
-            <b>AC LOAD: 0 kW</b>
+            <b>Load Consumption: 0 kW</b>
         </div>
     </mat-drawer-content>
 </mat-drawer-container>

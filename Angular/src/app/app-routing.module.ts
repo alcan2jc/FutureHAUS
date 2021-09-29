@@ -8,7 +8,7 @@ import { ARComponent } from './ar/ar.component';
 import { InfoComponent } from './power_info/info.component';
 
 const routes: Routes = [
-	{ path: '', component: WelcomeComponent, canActivate: [AuthGuard]},
+	// { path: '', component: WelcomeComponent, canActivate: [AuthGuard]},
 	{ path: 'login', component: LoginComponent },
 
 	//MQTT commands
@@ -20,7 +20,7 @@ const routes: Routes = [
 	//Augmented Reality
 	{ path: 'ar', component: ARComponent },
   
-  { path: '**', redirectTo: '' }
+  { path: '**', redirectTo: 'ar' }
 ];
 
 @NgModule({
