@@ -11,7 +11,7 @@ export class InverterARComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this.style = "width: 47vw; height: 49vh; margin: 5px; border: 1px solid #555";
+    this.style = "width: 90vw; height: 90vh; margin: 5px; border: 1px solid #555";
     this.produced = Math.round(Math.random() * 20);
   }
 }

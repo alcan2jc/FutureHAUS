@@ -3,21 +3,22 @@
         <div class="text-center">
             <h3>
                 <video hidden #videoElement></video>
+                <canvas #canvas style="z-index:1; position:absolute"></canvas>
+                <button mat-raised-button color="primary"
+                    style="z-index:2; position:absolute; top:buttonY; left:buttonX">Primary</button>
+                <inverterAR-component *ngIf="which === 'Inverter'"></inverterAR-component>
                 <div class="Row">
-                    <!-- <div class="Column">
-                        <canvas #canvas></canvas>
-                    </div> -->
                     <div class="Column">
                         <!-- <inverterAR-component *ngIf="which === 'inverter'"></inverterAR-component>
                         <batteryAR-component *ngIf="which === 'battery'"></batteryAR-component>
                         <pvAR-component *ngIf="which === 'pv'"></pvAR-component>
                         <chargeAR-component *ngIf="which === 'battery'"></chargeAR-component> -->
-                        <inverterAR-component></inverterAR-component>
-                        <batteryAR-component></batteryAR-component>
+                        <!-- <inverterAR-component></inverterAR-component> -->
+                        <!-- <batteryAR-component></batteryAR-component> -->
                     </div>
                     <div class="Column">
-                        <pvAR-component></pvAR-component>
-                        <chargeAR-component></chargeAR-component>
+                        <!-- <pvAR-component></pvAR-component> -->
+                        <!-- <chargeAR-component></chargeAR-component> -->
                     </div>
                 </div>
 

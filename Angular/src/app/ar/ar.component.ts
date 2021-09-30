@@ -14,6 +14,8 @@ export class ARComponent implements OnInit {
   video: HTMLVideoElement;
   reqID;
   which: string;
+  buttonX: string;
+  buttonY: string;
   model: tf.GraphModel;
   constructor() { }
 
@@ -28,11 +30,9 @@ export class ARComponent implements OnInit {
 
     navigator.mediaDevices.getUserMedia(config).then(stream => {
       this.videoElement.nativeElement.srcObject = stream;
-      console.log(stream);
       this.videoElement.nativeElement.onloadedmetadata = () => {
         this.videoElement.nativeElement.play();
         this.video = this.videoElement.nativeElement;
-        console.log(this.video);
       };
     },
       err => console.log("err:", err));
@@ -47,9 +47,9 @@ export class ARComponent implements OnInit {
   //Coco code here
   public async predictWithCocoModel() {
     const model = await cocoSSD.load();
-    // setTimeout(() => {
-    //   this.detectFrame(this.video, model);
-    // }, 3000);
+    setTimeout(() => {
+      this.detectFrame(this.video, model);
+    }, 3000);
     // this.detectFrame(this.video, model);
   }
 
@@ -65,7 +65,6 @@ export class ARComponent implements OnInit {
 
   renderPredictions = (predictions, t0) => {
     const canvas = this.canvas.nativeElement;
-
     const ctx = canvas.getContext("2d");
     canvas.width = 750;
     canvas.height = 750;
@@ -86,30 +85,44 @@ export class ARComponent implements OnInit {
       // Bounding box
       ctx.strokeStyle = "#00FFFF";
       ctx.lineWidth = 2;
-      ctx.strokeRect(x, y, width, height);
+      let xoffset = width / 4;
+      let yoffset = height / 4;
+      ctx.strokeRect(x + (xoffset), y + (yoffset), width, height);
       // Label background
       ctx.fillStyle = "#00FFFF";
       const textWidth = ctx.measureText(prediction.class).width;
       const textHeight = parseInt(font, 10); // base 10
-      ctx.fillRect(x, y, textWidth + 4, textHeight + 4);
+      ctx.fillRect(x + xoffset, y + yoffset, textWidth, textHeight);
     });
+
     predictions.forEach(prediction => {
 
       const x = prediction.bbox[0];
       const y = prediction.bbox[1];
+      const width = prediction.bbox[2];
+      const height = prediction.bbox[3];
+      let xoffset = width / 4;
+      let yoffset = height / 4;
       ctx.fillStyle = "#000000";
-      ctx.fillText(prediction.class, x, y);
-
-      if (prediction.class === "keyboard") {
+      ctx.fillText(prediction.class, x + xoffset, y + yoffset);
+      
+      if (prediction.class === "cell phone") {
         this.which = "Inverter";
+        canvas.style.display='none';
       } else if (prediction.class === "mouse") {
         this.which = "Battery";
+        ctx.canvas.hidden = true;
       } else if (prediction.class === "remote") {
         this.which = "PV";
+        ctx.canvas.hidden = true;
+      } else if (prediction.class === "person") {
+        this.which = "";
+        canvas.style.display="block";
       }
       // Reminder: Turn power components to be one component for less work. 
       // console.log(prediction.class, `Took ${t1 - t0} milliseconds`);
     });
+
   };
 
   ngOnDestroy() {
