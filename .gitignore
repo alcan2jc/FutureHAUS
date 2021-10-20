@@ -1,5 +1,0 @@
-# IDE - VSCode
-.vscode/*
-!.vscode/settings.json
-
-!ngrok.exe
