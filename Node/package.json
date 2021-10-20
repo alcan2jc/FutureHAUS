@@ -8,9 +8,12 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-jwt": "^6.0.0",
-    "mongoose": "^5.12.3"
+    "mongoose": "^5.12.3",
+    "long": "4.0.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/long": "4.0.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -42,7 +42,10 @@ import { ChargeArComponent } from './ar/charge/charge-ar/charge-ar.component';
 import { PvArComponent } from './ar/pv/pv-ar/pv-ar.component';
 
 const MQTT_SERVICE_OPTIONS: IMqttServiceOptions = {
-  hostname: '192.168.0.160',
+  // hostname: '192.168.0.160',
+  hostname: '10.0.0.115',
+  username: "username",
+  password: "FutureHAUS",
   port: 9001,
   path: ''
 };

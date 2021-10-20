@@ -1,8 +1,9 @@
 .Row {
     display: table;
-    width: 100%; /*Optional*/
+    width: 85%; /*Optional*/
     table-layout: fixed; /*Optional*/
-    border-spacing: 2px; /*Optional*/
+    border-spacing: 1px; /*Optional*/
+    margin-left: 1px;
 }
 .Column {
     display: table-cell;
