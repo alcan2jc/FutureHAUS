@@ -14,9 +14,7 @@ export class TitleComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    // this.style = "width: " + (2 * window.screen.width / (this.numCols)) + 
-    // "px; background-color: " + this.bgColor + ";";
-    this.style = "width: " + 2 * (95 / (this.numCols)) + 
+    this.style = "width: " + (95 * (2 / this.numCols)) + 
     "vw; background-color: " + this.bgColor + ";";
   }
 }

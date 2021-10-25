@@ -21,7 +21,7 @@ export class DashboardComponent {
           battery: { cols: 1, rows: 1 },
           title: { cols: 2, rows: 1 },
           produced: { cols: 1, rows: 1 },
-          net: { cols: 4, rows: 2 },
+          //*net: { cols: 4, rows: 2 }, remove in html
           power: { cols: 4, rows: 2 },
           weather: { cols: 4, rows: 2 }
         };
@@ -33,7 +33,7 @@ export class DashboardComponent {
         battery: { cols: 1, rows: 1 },
         title: { cols: 2, rows: 1 },
         produced: { cols: 1, rows: 1 },
-        net: { cols: 4, rows: 2 },
+        // *net: { cols: 4, rows: 2 }, remove in html
         power: { cols: 4, rows: 2 },
         weather: { cols: 4, rows: 2 }
       };
@@ -42,10 +42,11 @@ export class DashboardComponent {
 
   constructor(private breakpointObserver: BreakpointObserver
   ) {
-    this.numRows = 7;
+    this.numRows = 5;
     this.numCols = 4;
     this.bgColor = "#0d1111"
-    // this.rowHeightStr = (window.screen.height / this.numRows) * .965 + 'px';
-    this.rowHeightStr = (95.5 / this.numRows).toString() + 'vh';
+
+    //*93.5
+    this.rowHeightStr = (93.5 / this.numRows).toString() + 'vh';
   }
 }

@@ -48,11 +48,17 @@ export class BatteryComponent implements OnInit {
       type: 'solidgauge',
       // backgroundColor: "#2a2a2b"
       backgroundColor: "#272e48",
+      style: {
+        margin: 1
+      }
     },
-
+    //*
     title: {
-      text: 'Battery Charge',
-      style: { fontSize: "30px" }
+      text: 'Battery Voltage',
+      floating: true,
+      style: { fontSize: "18px", fontWeight: 'bold'},
+      // align: "left",
+      y: 10,
     },
 
     pane: {
@@ -65,7 +71,7 @@ export class BatteryComponent implements OnInit {
         innerRadius: '60%',
         outerRadius: '100%',
         shape: 'arc'
-      }]
+      }],
     },
 
     exporting: {
@@ -112,7 +118,7 @@ export class BatteryComponent implements OnInit {
     series: [{
       name: 'Voltage',
       type: undefined,
-      data: [0],
+      data: [{ y: 0, dataLabels: { x: 0, y: -20 } }],
       dataLabels: {
         format:
           '<div style="text-align:center">' +
@@ -124,13 +130,13 @@ export class BatteryComponent implements OnInit {
 
   ngOnInit(): void {
     //Subscribe to MQTT topic
-
-    this.style = "width: " + (80 / this.numCols).toString() + "vw; background-color: " + this.bgColor;
+    //*90
+    this.style = "width: " + (90 / this.numCols).toString() + "vw; background-color: " + this.bgColor;
     this.gaugeOptions.chart = {
       type: 'solidgauge',
       marginRight: 1,
-      width: (window.screen.width / this.numCols) * .78,
-      height: (window.screen.height / this.numRows) * .9,
+      width: (window.screen.width / this.numCols) * .80, //*
+      height: (window.screen.height / this.numRows) * .85, //*
       // backgroundColor: "#2a2a2b",
       backgroundColor: this.bgColor,
       // backgroundColor: "#272e48",
@@ -152,8 +158,9 @@ export class BatteryComponent implements OnInit {
       dataLabels: {
         format:
           '<div style="text-align:center">' +
-          '<span style="font-size:20px">{y} V</span><br/>' +
-          '</div>'
+          '<span style="font-size:20px; y:-20">{y} V</span><br/>' +
+          '</div>',
+        
       },
     }]
     this.updateFlag = true;

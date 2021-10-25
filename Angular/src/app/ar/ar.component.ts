@@ -2,8 +2,8 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import * as tf from "@tensorflow/tfjs";
 import * as cocoSSD from '@tensorflow-models/coco-ssd';
 import { loadGraphModel } from '@tensorflow/tfjs-converter';
-tf.setBackend('webgl');
-// tf.ENV.set('WEBGL_PACK', false);
+// tf.setBackend('webgl');
+tf.ENV.set('WEBGL_PACK', false);
 
 @Component({
   selector: 'app-ar',
@@ -46,7 +46,7 @@ export class ARComponent implements OnInit {
     this.predict();
   }
 
-  initCamera(config: any) {
+  async initCamera(config: any) {
     navigator.mediaDevices.getUserMedia(config).then(stream => {
       this.videoElement.nativeElement.srcObject = stream;
       this.videoElement.nativeElement.onloadedmetadata = () => {
@@ -57,12 +57,12 @@ export class ARComponent implements OnInit {
       err => console.log("err:", err));
   }
 
-  async loadModel() {
-    // const model = await cocoSSD.load();
-    // const model = await loadGraphModel("https://raw.githubusercontent.com/trangml/futureHAUS-TFJS-object-detection/master/models/tf2_web_model/model.json");
-    this.model = await loadGraphModel("../../assets/model/model.json");
-    // return model;
-  }
+  // async loadModel() {
+  //   // const model = await cocoSSD.load();
+  //   // this.model = await loadGraphModel("https://raw.githubusercontent.com/trangml/futureHAUS-TFJS-object-detection/master/models/tf2_web_model/model.json");
+  //   // this.model = await loadGraphModel("../../assets/model/model.json");
+  //   // return model;
+  // }
 
 
   //Coco code here
@@ -75,7 +75,8 @@ export class ARComponent implements OnInit {
 
   public async predict() {
     // this.model = this.loadModel();
-    this.model = await loadGraphModel("../../assets/model/model.json");
+    this.model = await loadGraphModel("https://raw.githubusercontent.com/trangml/futureHAUS-TFJS-object-detection/master/models/tf2_web_model/model.json");
+    // this.model = await tf.loadGraphModel("../../assets/model/model.json");
     setTimeout(() => {
       this.detectFrame(this.video, this.model);
     }, 3000);
@@ -94,10 +95,8 @@ export class ARComponent implements OnInit {
 
   // Power system model detectFrame
   detectFrame = (video, model) => {
-    console.log("1");
     tf.engine().startScope();
-    console.log("2");
-    model.executeAsync(this.process_input(video)).then(predictions => {
+    model.executeAsync(this.processInput(video)).then(predictions => {
       console.log("pred", predictions);
       this.renderPredictions(predictions);
       requestAnimationFrame(() => {
@@ -107,8 +106,8 @@ export class ARComponent implements OnInit {
     });
   };
 
-  process_input(video_frame) {
-    const tfimg = tf.browser.fromPixels(video_frame).toInt();
+  processInput(videoFrame) {
+    const tfimg = tf.browser.fromPixels(videoFrame).toInt();
     const expandedimg = tfimg.transpose([0, 1, 2]).expandDims();
     return expandedimg;
   };

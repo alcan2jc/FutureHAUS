@@ -19,9 +19,9 @@
       <power-component [numRows]="numRows" [bgColor]="bgColor"></power-component>
     </mat-grid-tile>
     
-    <mat-grid-tile [colspan]="( cardLayout | async )?.net.cols" [rowspan]="( cardLayout | async )?.net.rows">
+    <!-- <mat-grid-tile [colspan]="( cardLayout | async )?.net.cols" [rowspan]="( cardLayout | async )?.net.rows">
       <net-component [numRows]="numRows" [bgColor]="bgColor"></net-component>
-    </mat-grid-tile>
+    </mat-grid-tile> -->
 
     <mat-grid-tile [colspan]="( cardLayout | async )?.weather.cols" [rowspan]="( cardLayout | async )?.weather.rows">
       <weather-component [numRows]="numRows" [bgColor]="bgColor"></weather-component>

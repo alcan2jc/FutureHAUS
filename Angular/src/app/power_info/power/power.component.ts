@@ -48,7 +48,7 @@ export class PowerComponent implements OnInit {
 
     ngOnInit(): void {
         // this.style = "width: " + window.screen.width * .965 + "px; background-color: " + this.bgColor;
-        this.style = "width: 94vw; background-color: " + this.bgColor;
+        this.style = "width: 98vw; background-color: " + this.bgColor;
         this.updateFlag = false;
         this.production = [];
         this.consumption = [];
@@ -58,8 +58,8 @@ export class PowerComponent implements OnInit {
             chart: {
                 type: 'area',
                 // width: window.screen.width * .96,
-                width: window.screen.width * .9,
-                height: (window.screen.height * 2) / (this.numRows) * .88,
+                width: window.screen.width * .95,
+                height: (window.screen.height * 2) / (this.numRows) * .75,
                 backgroundColor: this.bgColor,
                 events: {
                     load: function () {
@@ -76,7 +76,9 @@ export class PowerComponent implements OnInit {
                     }
                 }
             },
-
+            credits: {
+                enabled: false
+            },
             time: {
                 useUTC: false
             },
@@ -101,7 +103,7 @@ export class PowerComponent implements OnInit {
             },
             yAxis: {
                 title: {
-                    text: 'Current Power (KwH)',
+                    text: 'Current Power (kW)',
                     style: {
                         fontSize: "200%",
                         color: "white"
@@ -118,7 +120,7 @@ export class PowerComponent implements OnInit {
                         fontSize: "150%"
                     },
                     formatter: function () {
-                        return (Number(this.value)).toString() + " KWh";
+                        return (Number(this.value)).toString() + " kW";
                     }
                 }
             },

@@ -111,12 +111,21 @@ export class WeatherComponent implements OnInit {
       },
       color: '#FF3333',
       negativeColor: '#48AFE8'
-    }]
+    }], 
+    //*
+    credits: {
+      enabled: false
+    }
   }
 
   ngOnInit(): void {
+    function vw(v) {
+      var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+      return (v * w) / 100;
+    }
     // this.style = "width: " + window.screen.width * .965 + "px; background-color: " + this.bgColor;
-    this.style = "width: 94vw; background-color: " + this.bgColor;
+    let vwidth = vw(98);
+    this.style = "width: " + vwidth.toString + "; background-color: " + this.bgColor;
     this.polltime = interval(15 * 60 * 1000);
     let weather = this;
     // this.polltime = interval(1000);
@@ -128,8 +137,9 @@ export class WeatherComponent implements OnInit {
     //Weather symbols from https://cdn.jsdelivr.net/gh/YR/weather-symbols@6.0.2/dist/svg/
     this.chartOptions.chart = {
       plotBorderWidth: 1,
-      width: (window.screen.width) * .93,
-      height: (window.screen.height * 2) / (this.numRows) * .88,
+      // width: (window.screen.width) * .98,
+      width: vwidth-10, //*
+      height: (window.screen.height * 2) / (this.numRows) * .72,//*
       // backgroundColor: "#272e48",
       backgroundColor: this.bgColor,
       alignTicks: true,

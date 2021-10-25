@@ -52,7 +52,7 @@ export class NetComponent implements OnInit {
       chart: {
         type: 'area',
         width: window.screen.width * .9,
-        height: (window.screen.height * 2) / (this.numRows) * .88,
+        height: (window.screen.height * 2) / (this.numRows) * .80,
         backgroundColor: this.bgColor,
         events: {
           load: function () {
@@ -87,7 +87,7 @@ export class NetComponent implements OnInit {
       },
       yAxis: {
         title: {
-          text: 'Total Power (KwH)',
+          text: 'Total Power (kW)',
           style: {
             fontSize: "200%",
             color: "white"
@@ -104,7 +104,7 @@ export class NetComponent implements OnInit {
             fontSize: "150%"
           },
           formatter: function () {
-            return (Number(this.value)).toString() + " KWh";
+            return (Number(this.value)).toString() + " kW";
           }
         }
       },

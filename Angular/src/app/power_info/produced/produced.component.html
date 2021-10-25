@@ -1,9 +1,10 @@
 <mat-card [style]="style">
     <h3 class="title">
         <mat-icon class="avatar-icon" style="padding-right: 35px">bolt</mat-icon>
-        <span>Produced</span>
+        <span>Producing</span>
     </h3>
-    <h3 class="value">{{electricity | number: '1.2-2'}} KWh</h3>
+    <!-- <h3 class="value">{{electricity | number: '1.2-2'}} KWh</h3> -->
+    <h3 class="value">{{producing}} kW</h3>
     <!-- <div class="percent">
         <span [ngStyle]="{'color': electricity > lastWeekElectricity ? 'green' : 'red' }">
             {{(((electricity - lastWeekElectricity) / electricity)) | percent: '2.1-2'}}
