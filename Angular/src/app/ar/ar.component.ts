@@ -31,13 +31,18 @@ export class ARComponent implements OnInit {
     this.style = "width: 50vw; height: 85vh; margin: 1px; border: 1px solid #555";
     this.classesDir = {
       1: {
-        name: 'Inverter',
+        name: 'inverter',
         id: 1,
       },
       2: {
-        name: 'Other',
+        name: 'charge_controller',
         id: 2,
+      },
+      3: {
+        name: 'battery',
+        id: 3,
       }
+
     }
     this.threshold = 0.75;
     this.which = "";
@@ -60,7 +65,7 @@ export class ARComponent implements OnInit {
   // async loadModel() {
   //   // const model = await cocoSSD.load();
   //   // this.model = await loadGraphModel("https://raw.githubusercontent.com/trangml/futureHAUS-TFJS-object-detection/master/models/tf2_web_model/model.json");
-  //   // this.model = await loadGraphModel("../../assets/model/model.json");
+  // this.model = await loadGraphModel("./web_model/model.json");
   //   // return model;
   // }
 
@@ -75,11 +80,12 @@ export class ARComponent implements OnInit {
 
   public async predict() {
     // this.model = this.loadModel();
-    this.model = await loadGraphModel("https://raw.githubusercontent.com/trangml/futureHAUS-TFJS-object-detection/master/models/tf2_web_model/model.json");
-    // this.model = await tf.loadGraphModel("../../assets/model/model.json");
+    // this.model = await loadGraphModel("https://raw.githubusercontent.com/trangml/futureHAUS-TFJS-object-detection/master/models/tf2_web_model/model.json");
+    // this.model = await loadGraphModel("../ar/web_model/model.json");
+    this.model = await tf.loadGraphModel("../../assets/web_model/model.json");
     setTimeout(() => {
       this.detectFrame(this.video, this.model);
-    }, 3000);
+    }, 10000);
   }
 
   //Coco Model detectFrame

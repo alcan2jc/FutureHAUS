@@ -1,13 +1,25 @@
-<video hidden #videoElement></video>
 <div class="Row">
     <div class="Column">
-        <!-- <canvas #canvas style="z-index:1; position:absolute"></canvas> -->
-        <!-- <button mat-raised-button [style]="buttonStyle()" color="warn" (click)="buttonClicked($event)">{{buttonInput}}</button> -->
+        <video
+        #videoElement 
+        id='frame'
+        [width]="videoWidth"
+        [height]="videoHeight"
+        autoPlay
+        playsInline
+        ></video>
+        <canvas 
+        #canvas 
+        style="position: fixed; z-index:1;"
+        [width]="videoWidth"
+        [height]="videoHeight"
+        ></canvas>
+        <button mat-raised-button [style]="buttonStyle()" color="warn" (click)="buttonClicked($event)">{{buttonInput}}</button>
     </div>
     <div class="Column">
         <!-- <inverterAR-component [style]="style" *ngIf="which === 'inverter'"></inverterAR-component> -->
-        <inverterAR-component [style]="style"></inverterAR-component>
-        <batteryAR-component [style]="style" *ngIf="which === 'battery'"></batteryAR-component>
-        <chargeAR-component [style]="style"*ngIf="which === 'charge'"></chargeAR-component>
+        <inverterAR-component [style]="style" *ngIf="which === 'Inverter'"></inverterAR-component>
+        <batteryAR-component [style]="style" *ngIf="which === 'Battery'"></batteryAR-component>
+        <chargeAR-component [style]="style"*ngIf="which === 'PV'"></chargeAR-component>
     </div>
 </div>
